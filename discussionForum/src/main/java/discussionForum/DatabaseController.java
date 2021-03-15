@@ -1,11 +1,17 @@
-import java.time.LocalDate;
+package discussionForum;
 
-public interface DatabaseController{
+import java.time.LocalDateTime;
 
-public static DatabaseController db = null;
+public interface DatabaseController {
 
-public boolean isEmailUsed(String Email);
-public boolean userExist(String Email, String Password);
-public void postThread(String Content, String Author, LocalDate PostedTime);
+    DatabaseController db = new SQLController();
+
+    boolean isEmailUsed(String email);
+
+    User signIn(String email, String password);
+
+    void postThread(String title, String content, User author, LocalDateTime postedTime, int folderId);
+
+    User createUser(String firstName, String lastName, String email, String password);
 
 }
