@@ -6,14 +6,12 @@ public class User{
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
 
-    public User(int userID, String firstName, String lastName, String email, String password){
+    public User(int userID, String firstName, String lastName, String email){
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
     }
 
     public static User signIn(String Email, String Password) {
@@ -43,10 +41,6 @@ public class User{
         return lastName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -59,9 +53,6 @@ public class User{
         this.lastName = lastName;
     }
 
-    public void setPassword(String password){
-        this.password = password;
-    }
 
     public int getUserID() {
         return userID;
