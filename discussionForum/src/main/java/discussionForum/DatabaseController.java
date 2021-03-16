@@ -16,6 +16,12 @@ public interface DatabaseController {
 
     void postComment(String content, User author, LocalDateTime postedTime, int discussionPostID);
 
+    void tag(Thread thread, Tag tag);
+
+    void likePost(Post post, LocalDateTime postedTime);
+
+    void viewPost(Post post, LocalDateTime postedTimed);
+
     void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads);
 
     User createUser(String firstName, String lastName, String email, String password);
