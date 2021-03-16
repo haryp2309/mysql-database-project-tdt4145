@@ -5,16 +5,17 @@ import java.sql.DatabaseMetaData;
 import static discussionForum.DatabaseController.db;
 
 public class Course {
-    private int CourseID;
-    private String CourseName;
-    private String Term;
-    private int TermYear;
-    private boolean AnonymousAllowance;
+    private int courseID;
+    private String courseName;
+    private String term;
+    private int termYear;
+    private boolean anonymousAllowance;
 
-    public Course(String CourseName, String Term, int TermYear, boolean AnonymousAllowance) {
-        this.CourseName = CourseName;
-        this.Term = Term;
-        this.TermYear = TermYear;
-        this.AnonymousAllowance = AnonymousAllowance;
+
+    public Course(String courseName, String term, int termYear, boolean anonymousAllowance) {
+        this.courseName = courseName;
+        this.term = term;
+        this.termYear = termYear;
+        this.anonymousAllowance = anonymousAllowance;
     }
 }

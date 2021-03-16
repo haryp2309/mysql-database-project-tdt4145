@@ -4,13 +4,13 @@ import static discussionForum.DatabaseController.db;
 
 public class User {
     private int userID;
-    private String firstNam;
+    private String firstName;
     private String lastName;
     private String email;
 
     public User(int id, String firstName, String lastName, String email) {
         this.userID = id;
-        this.firstNam = firstName;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
