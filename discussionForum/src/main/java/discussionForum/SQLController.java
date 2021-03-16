@@ -12,6 +12,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
     private static String TABLE_USER = "User";
     private static String TABLE_POST = "Post";
     private static String TABLE_THREAD = "Thread";
+    private static String TABLE_DISCUSSION = "Discussion";
+    private static String TABLE_COMMENT = "Comment";
 
     private static String USER_ID = "UserID";
     private static String USER_FIRST_NAME = "FirstName";
@@ -26,7 +28,12 @@ public class SQLController extends MySQLConn implements DatabaseController {
     private static String POST_TYPE = "PostType";
     private static String POST_TYPES_THREAD = "Thread";
     private static String POST_THREAD_TITLE = "Title";
+    private static String POST_THREAD_POST_ID = "PostID";
     private static String POST_THREAD_FOLDER_ID = "FolderID";
+    private static String POST_DISCUSSION_POST_ID = "PostID";
+    private static String POST_DISCUSSION_THREAD_ID = "ThreadID";
+    private static String POST_COMMENT_POST_ID = "PostID";
+    private static String POST_COMMENT_DISCUSSION_ID = "DiscussionID";
 
 
     public SQLController() {
@@ -126,6 +133,16 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     @Override
+    public int likedCount(Post post) {
+        return 0;
+    }
+
+    @Override
+    public int viewedCount(Post post) {
+        return 0;
+    }
+
+    @Override
     public boolean isEmailUsed(String email) {
         Collection<Map<String, String>> result = select(null, TABLE_USER, "WHERE " + USER_EMAIL + " = \"" + email + "\"");
         if (result.size() == 1) {
@@ -164,13 +181,31 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     @Override
-    public void postThread(String title, String content, User author, LocalDateTime postedTime, int folderId) {
+    public void postThread(String title, String content, User author, LocalDateTime postedTime, Folder folder) {
         int postId = post(content, author, postedTime);
         HashMap<String, String> values = new HashMap<>();
-        values.put(POST_ID, Integer.toString(postId));
+        values.put(POST_THREAD_POST_ID, Integer.toString(postId));
         values.put(POST_THREAD_TITLE, title);
-        values.put(POST_THREAD_FOLDER_ID, Integer.toString(folderId));
+        values.put(POST_THREAD_FOLDER_ID, Integer.toString(folder.getFolderID()));
         insert(values, TABLE_THREAD);
+    }
+
+    @Override
+    public void postDiscussionPost(String content, User author, LocalDateTime postedTime, Thread thread) {
+        int postId = post(content, author, postedTime);
+        HashMap<String, String> values = new HashMap<>();
+        values.put(POST_DISCUSSION_POST_ID, Integer.toString(postId));
+        values.put(POST_DISCUSSION_THREAD_ID, Integer.toString(thread.getPostID()));
+        insert(values, TABLE_DISCUSSION);
+    }
+
+    @Override
+    public void postComment(String content, User author, LocalDateTime postedTime, DiscussionPost discussionPost) {
+        int postId = post(content, author, postedTime);
+        HashMap<String, String> values = new HashMap<>();
+        values.put(POST_COMMENT_POST_ID, Integer.toString(postId));
+        values.put(POST_COMMENT_DISCUSSION_ID, Integer.toString(discussionPost.getPostID()));
+        insert(values, TABLE_COMMENT);
     }
 
     public static void main(String[] args) {
@@ -178,7 +213,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         User user = User.signIn("ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
-        System.out.println(db.isEmailUsed("ssdadss@dasddjacskkljl.com"));
+        Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
+        DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
+        db.postComment("grov content", user, LocalDateTime.now(), discussion);
+        //System.out.println(db.isEmailUsed("ssdadss@dasddjacskkljl.com"));
     }
 }
 

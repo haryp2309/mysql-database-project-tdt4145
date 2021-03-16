@@ -1,6 +1,8 @@
 package discussionForum;
 
 import java.sql.DatabaseMetaData;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static discussionForum.DatabaseController.db;
 
