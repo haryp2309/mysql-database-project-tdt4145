@@ -18,4 +18,7 @@ public interface DatabaseController {
 
     User createUser(String firstName, String lastName, String email, String password);
 
+    int likedCount(Post post);
+
+    int viewedCount(Post post);
 }
