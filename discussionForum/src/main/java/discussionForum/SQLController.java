@@ -133,6 +133,16 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     @Override
+    public Collection<Integer> search(String searchWord) {
+        return null;
+    }
+
+    @Override
+    public String getStatistics(User user) {
+        return null;
+    }
+
+    @Override
     public int likedCount(Post post) {
         return 0;
     }
@@ -208,14 +218,34 @@ public class SQLController extends MySQLConn implements DatabaseController {
         insert(values, TABLE_COMMENT);
     }
 
+    @Override
+    public void tag(Thread thread, Tag tag) {
+        
+    }
+
+    @Override
+    public void likePost(User user, Post post, LocalDateTime postedTime) {
+
+    }
+
+    @Override
+    public void viewPost(User user, Post post, LocalDateTime postedTimed) {
+
+    }
+
+    @Override
+    public void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads) {
+
+    }
+
     public static void main(String[] args) {
         SQLController db = new SQLController();
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         User user = User.signIn("ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
-        Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
-        DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
-        db.postComment("grov content", user, LocalDateTime.now(), discussion);
+        //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
+        //DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
+        //db.postComment("grov content", user, LocalDateTime.now(), discussion);
         //System.out.println(db.isEmailUsed("ssdadss@dasddjacskkljl.com"));
     }
 }

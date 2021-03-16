@@ -3,28 +3,33 @@ package discussionForum;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import static discussionForum.DatabaseController.db;
 
 public class DiscussionPost extends Post{
 
-    private Collection<Comment> comments = new ArrayList<>();
+    private Collection<Comment> comments = new ArrayList<Comment>();
 
-
-    public DiscussionPost(int postID, String content, int authorID, LocalDateTime postedTime, boolean postType, Collection<Comment> comments) {
-        super(postID, content, authorID, postedTime, postType);
+    public DiscussionPost(int postID, String content, User author, boolean postType, Collection<Comment> comments) {
+        super(postID, content, author, postType);
         this.comments = comments;
     }
 
-    public Collection<Comment> getDiscussionPost() {
-        return comments;
+    public void addComments(Comment comment){
+        if(!this.comments.contains(comment)){
+            this.comments.add(comment);
+        }
     }
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
+    public void deleteComment(Comment comment){
+        if(this.comments.contains(comment)){
+            this.comments.remove(comment);
+        }
     }
 
-    public void deleteComment(Comment comment) {
-        this.comments.remove(comment);
+    public void postDiscussionPost(String content, User author, Thread thread){
+        db.postDiscussionPost(content, author, getPostedTime(), thread);
     }
+
 
 
 }
