@@ -27,6 +27,10 @@ public interface DatabaseController {
 
     User createUser(String firstName, String lastName, String email, String password);
 
+    //"A student searches for posts with a specific keyword “WAL”. 
+    //The return value of this should be a list of ids of posts matching the keyword."
+    Collection<Integer> search(String searchWord);
+
     int likedCount(Post post);
 
     int viewedCount(Post post);
