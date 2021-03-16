@@ -13,5 +13,4 @@ public interface DatabaseController {
     void postThread(String title, String content, User author, LocalDateTime postedTime, int folderId);
 
     User createUser(String firstName, String lastName, String email, String password);
-
 }
