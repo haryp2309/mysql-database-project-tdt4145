@@ -31,6 +31,13 @@ public interface DatabaseController {
     //The return value of this should be a list of ids of posts matching the keyword."
     Collection<Integer> search(String searchWord);
 
+    //An instructor views statistics for users and how many post they have read and how many
+    //they have created. These should be sorted on highest read posting numbers. The output is
+    //“user name, number of posts read, number of posts created”. You don’t need to order by 
+    //posts created, but the number should be displayed. The result should also include users
+    //which have not read or created posts.
+    String getStatistics(User user);
+
     int likedCount(Post post);
 
     int viewedCount(Post post);
