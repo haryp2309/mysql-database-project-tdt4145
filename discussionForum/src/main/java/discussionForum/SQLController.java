@@ -9,9 +9,9 @@ import java.util.*;
 
 public class SQLController extends MySQLConn implements DatabaseController {
 
-    private static String TABLE_USER = "user";
-    private static String TABLE_POST = "post";
-    private static String TABLE_THREAD = "thread";
+    private static String TABLE_USER = "User";
+    private static String TABLE_POST = "Post";
+    private static String TABLE_THREAD = "Thread";
 
     private static String USER_ID = "UserID";
     private static String USER_FIRST_NAME = "FirstName";
@@ -127,7 +127,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public boolean isEmailUsed(String email) {
-        // TODO: gjøre sjekken i queryen isteden....
         Collection<Map<String, String>> result = select(null, TABLE_USER, "WHERE " + USER_EMAIL + " = \"" + email + "\"");
         if (result.size() == 1) {
             return true;
@@ -155,7 +154,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }
     }
 
-    public int post(String content, User author, LocalDateTime postedTime) {
+    private int post(String content, User author, LocalDateTime postedTime) {
         HashMap<String, String> values = new HashMap<>();
         values.put(POST_CONTENT, content);
         values.put(POST_AUTHOR_ID, Integer.toString(author.getUserID()));
@@ -177,9 +176,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static void main(String[] args) {
         SQLController db = new SQLController();
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
-        User user = db.signIn("ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
+        User user = User.signIn("ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
-        System.out.println(db.isEmailUsed("ssdadss@sdasddjacskkljl.com"));
+        System.out.println(db.isEmailUsed("ssdadss@dasddjacskkljl.com"));
     }
 }
 
