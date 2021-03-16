@@ -1,6 +1,7 @@
 package discussionForum;
 
 import java.time.LocalDateTime;
+import static discussionForum.DatabaseController.db;
 
 public abstract class Post{
     private int postID;
@@ -61,4 +62,13 @@ public abstract class Post{
     public String getContent() {
         return content;
     }
+
+    public int likedCount(Post post){
+        return db.likedCount(post);
+    }
+
+    public int viewedCount(Post post){
+        return db.viewedCount(post);
+    }
+
 }
