@@ -16,6 +16,8 @@ public interface DatabaseController {
 
     void postComment(String content, User author, LocalDateTime postedTime, int discussionPostID);
 
+    void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads);
+
     User createUser(String firstName, String lastName, String email, String password);
 
     int likedCount(Post post);
