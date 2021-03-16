@@ -1,4 +1,7 @@
 package discussionForum;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import static discussionForum.DatabaseController.db;
 
 public class User{
