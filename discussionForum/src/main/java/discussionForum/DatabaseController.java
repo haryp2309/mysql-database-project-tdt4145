@@ -1,6 +1,7 @@
 package discussionForum;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 public interface DatabaseController {
 
@@ -10,11 +11,11 @@ public interface DatabaseController {
 
     User signIn(String email, String password);
 
-    void postThread(String title, String content, User author, LocalDateTime postedTime, int folderId);
+    void postThread(String title, String content, User author, LocalDateTime postedTime, Folder folder);
 
-    void postDiscussionPost(String content, User author, LocalDateTime postedTime, int threadID);
+    void postDiscussionPost(String content, User author, LocalDateTime postedTime, Thread thread);
 
-    void postComment(String content, User author, LocalDateTime postedTime, int discussionPostID);
+    void postComment(String content, User author, LocalDateTime postedTime, DiscussionPost discussionPostID);
 
     void tag(Thread thread, Tag tag);
 
@@ -29,4 +30,5 @@ public interface DatabaseController {
     int likedCount(Post post);
 
     int viewedCount(Post post);
+
 }
