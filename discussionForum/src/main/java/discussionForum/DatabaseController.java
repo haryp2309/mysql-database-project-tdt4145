@@ -18,9 +18,9 @@ public interface DatabaseController {
 
     void tag(Thread thread, Tag tag);
 
-    void likePost(Post post, LocalDateTime postedTime);
+    void likePost(User user, Post post, LocalDateTime postedTime);
 
-    void viewPost(Post post, LocalDateTime postedTimed);
+    void viewPost(User user, Post post, LocalDateTime postedTimed);
 
     void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads);
 
