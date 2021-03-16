@@ -44,4 +44,8 @@ public class Thread extends Post{
         db.postThread(title, content, author, this.getPostedTime(), folder);
     }
 
+    public static Collection<Integer> search (String searchWord){        
+        return db.search(searchWord);
+    }
+
 }
