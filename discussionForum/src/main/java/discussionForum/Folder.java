@@ -2,6 +2,8 @@ package discussionForum;
 
 import java.util.Collection;
 
+import static discussionForum.DatabaseController.db;
+
 public class Folder{
 
     private int folderID;
@@ -14,6 +16,10 @@ public class Folder{
         this.name=name;
         this.subfolders=subfolders;
         this.threads=threads;
+    }
+
+    public static void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads){
+        db.createFolder(name, subfolders, threads);
     }
 
 }
