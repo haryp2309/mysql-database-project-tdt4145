@@ -1,20 +1,21 @@
 package discussionForum;
 
 import java.time.LocalDateTime;
+
 import static discussionForum.DatabaseController.db;
 
 public abstract class Post{
     private int postID;
     private String content;
-    private int authorID;
+    private User author;
     private LocalDateTime postedTime;
     private boolean postType;
 
-    public Post(int postID, String content, int authorID, LocalDateTime postedTime, boolean postType) {
+    public Post(int postID, String content, User author, boolean postType) {
         this.postID = postID;
         this.content = content;
-        this.authorID = authorID;
-        this.postedTime = postedTime;
+        this.author = author;
+        this.postedTime = LocalDateTime.now();
         this.postType = postType;
     }
 
@@ -26,16 +27,16 @@ public abstract class Post{
         this.content = content;
     }
 
-    public void setAuthorID(int authorID) {
-        this.authorID = authorID;
+    public void setAuthorID(User author) {
+        this.author = author;
     }
 
     public void setPostType(boolean postType) {
         this.postType = postType;
     }
 
-    public int getAuthorID() {
-        return authorID;
+    public User getAuthor() {
+        return author;
     }
 
     public LocalDateTime getPostedTime() {
@@ -55,10 +56,6 @@ public abstract class Post{
     }
 
 
-    public void setPostedTime(LocalDateTime postedTime) {
-        this.postedTime = postedTime;
-    }
-
     public String getContent() {
         return content;
     }
@@ -70,5 +67,7 @@ public abstract class Post{
     public int viewedCount(Post post){
         return db.viewedCount(post);
     }
+
+
 
 }

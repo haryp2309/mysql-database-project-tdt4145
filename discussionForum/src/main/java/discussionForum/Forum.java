@@ -10,4 +10,9 @@ public class Forum {
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
+
+    public String getStatistics(User user){
+        return db.getStatistics;
+    }
+
 }
