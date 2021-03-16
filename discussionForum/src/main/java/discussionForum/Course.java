@@ -10,12 +10,14 @@ public class Course {
     private String term;
     private int termYear;
     private boolean anonymousAllowance;
+    private Collection<Folder> folders = new ArrayList<Folder>();
 
 
-    public Course(String courseName, String term, int termYear, boolean anonymousAllowance) {
+    public Course(String courseName, String term, int termYear, boolean anonymousAllowance, Collection<Folder> folders) {
         this.courseName = courseName;
         this.term = term;
         this.termYear = termYear;
         this.anonymousAllowance = anonymousAllowance;
+        this.folders = folders;
     }
 }
