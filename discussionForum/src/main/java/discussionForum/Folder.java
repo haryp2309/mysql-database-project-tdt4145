@@ -23,6 +23,10 @@ public class Folder {
         return folderID;
     }
 
+    public Collection<Thread> getThreads(Folder folder){
+        return db.getThreads(folder);
+    }
+
     public static void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
         db.createFolder(name, subfolders, threads, course);
     }

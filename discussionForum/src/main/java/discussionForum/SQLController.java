@@ -25,6 +25,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String TABLE_FOLDER = "Folder";
     public static final String TABLE_ROOT_FOLDER = "rootfolder";
     public static final String TABLE_SUB_FOLDER = "subfolder";
+    public static final String TABLE_ROOTFOLDER = "RootFolder";
 
     public static final String USER_ID = "UserID";
     public static final String USER_FIRST_NAME = "FirstName";
@@ -56,6 +57,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     public static final String VIEWED_TIME = "ViewedTime";
     public static final String LIKED_TIME = "LikedTime";
+
+    public static final String FOLDER_ID = "FolderID";
+    public static final String FOLDER_NAME = "Name";
+    public static final String FOLDER_TYPE = "FolderType";
 
     public SQLController() {
         this.connect();
@@ -253,6 +258,16 @@ public class SQLController extends MySQLConn implements DatabaseController {
         insert(values, TABLE_TAG_ON_THREAD);
     }
 
+    public Collection<Thread> getThreads(Folder folder){
+
+        Collection<String> attributes = new ArrayList<String>();
+        attributes.add("PostID");
+        attributes.add("Title");
+        Collection<Map<String,String>> result = select(attributes,TABLE_THREAD,"WHERE "+FOLDER_ID+" = "+folder.getFolderID());
+        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")),row.get("Title"),null,null,null)).collect(Collectors.toList());
+
+    }
+
     private String localDateTimeConverter(LocalDateTime localDateTime){
         return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
     }
@@ -286,8 +301,18 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
-
+        Map<String, String> rootFolders = new HashMap<>();
+        rootFolders.put(FOLDER_NAME, name);
+        rootFolders.put(FOLDER_TYPE, "Root");
+        rootFolders.put(COURSE_ID, Integer.toString(course.getCourseID()));
+        insert(rootFolders, TABLE_ROOTFOLDER);
     }
+
+
+
+
+
+
 
     public Collection<Folder> getFolders(Course course) {
         Collection<String> attributes = new ArrayList<>();
