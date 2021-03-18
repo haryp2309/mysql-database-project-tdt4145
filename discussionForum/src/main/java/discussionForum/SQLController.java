@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class SQLController extends MySQLConn implements DatabaseController {
@@ -149,12 +150,12 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     @Override
-    public Collection<Integer> search(String searchWord) {
+    public Collection<Thread> search(String searchWord) {
         Collection<String> attributes = new ArrayList<String>(); 
         attributes.add(PostID);
-        Collection<Map<String,String>> result = select(attributes,TABLE_POST,"INNER JOIN TABLE_THREAD USING (PostID) WHERE PostType = \"Thread\" AND (Title LIKE %"+searchWord+"% OR Content LIKE %"+searchWord+")");
-        
-        return null;
+        attributes.add(Name);
+        Collection<Map<String,String>> result = select(attributes,TABLE_POST,"INNER JOIN Thread USING (PostID) WHERE PostType = \"Thread\" AND (Title LIKE %"+searchWord+"% OR Content LIKE %"+searchWord+")");
+        return result.stream().map(row -> new Thread(row.get("PostID"),row.get("Title"),null,null,null)).collect(Collectors.toList());
     }
 
     @Override

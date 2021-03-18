@@ -2,6 +2,7 @@ package discussionForum;
 
 import static discussionForum.DatabaseController.db;
 
+import java.lang.management.ThreadInfo;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -45,7 +46,7 @@ public class Thread extends Post {
         db.postThread(title, content, author, this.getPostedTime(), folder);
     }
 
-    public static Collection<Integer> search(String searchWord) {
+    public static Collection<Thread> search(String searchWord) {
         return db.search(searchWord);
     }
 

@@ -31,7 +31,7 @@ public interface DatabaseController {
 
     //"A student searches for posts with a specific keyword “WAL”. 
     //The return value of this should be a list of ids of posts matching the keyword."
-    Collection<Integer> search(String searchWord);
+    Collection<Thread> search(String searchWord);
 
     //An instructor views statistics for users and how many post they have read and how many
     //they have created. These should be sorted on highest read posting numbers. The output is
