@@ -36,9 +36,6 @@ public class Folder {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void addSubfolder(Folder subfolder) {
         if (!this.subfolders.contains(subfolder)) {
@@ -46,11 +43,6 @@ public class Folder {
         }
     }
 
-    public void deleteSubfolder(Folder subfolder) {
-        if (this.subfolders.contains(subfolder)) {
-            this.subfolders.remove(subfolder);
-        }
-    }
 
 
 }
