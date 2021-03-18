@@ -23,6 +23,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String USER_EMAIL = "Email";
     public static final String USER_PASSWORD = "Password";
 
+    public static final String COURSE_ID = "CourseID";
+
     public static final String POST_ID = "PostID";
     public static final String POST_CONTENT = "Content";
     public static final String POST_AUTHOR_ID = "AuthorID";
@@ -233,8 +235,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    public Map<String, Object> coursesToUser(User user){
-
+    public Collection<Map<String, Object>> coursesToUser(User user){
+        select()
     }
 
     @Override
