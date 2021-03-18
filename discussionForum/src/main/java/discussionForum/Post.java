@@ -9,14 +9,12 @@ public abstract class Post {
     private String content;
     private User author;
     private LocalDateTime postedTime;
-    private boolean postType;
 
-    public Post(int postID, String content, User author, boolean postType) {
+    public Post(int postID, String content, User author) {
         this.postID = postID;
         this.content = content;
         this.author = author;
         this.postedTime = LocalDateTime.now();
-        this.postType = postType;
     }
 
 
@@ -28,9 +26,6 @@ public abstract class Post {
         return postedTime;
     }
 
-    public boolean isPostType() {
-        return postType;
-    }
 
     public static void main(String[] args) {
 

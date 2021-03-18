@@ -2,7 +2,6 @@ package discussionForum;
 
 import static discussionForum.DatabaseController.db;
 
-import java.lang.management.ThreadInfo;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,8 +11,8 @@ public class Thread extends Post {
     private Collection<Tag> tags = new ArrayList<>();
     private String title ;
 
-    public Thread(int postID, String title, String content, User author, boolean postType, Collection<DiscussionPost> discussionPosts) {
-        super(postID, content, author, postType);
+    public Thread(int postID, String title, String content, User author, Collection<DiscussionPost> discussionPosts) {
+        super(postID, content, author);
         this.discussionPosts = discussionPosts;
         this.title = title;
     }
@@ -40,6 +39,10 @@ public class Thread extends Post {
         if (this.tags.contains(tag)) {
             this.tags.remove(tag);
         }
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public void postThread(String title, String content, User author, Folder folder) {

@@ -9,8 +9,8 @@ public class DiscussionPost extends Post {
 
     private Collection<Comment> comments = new ArrayList<Comment>();
 
-    public DiscussionPost(int postID, String content, User author, boolean postType, Collection<Comment> comments) {
-        super(postID, content, author, postType);
+    public DiscussionPost(int postID, String content, User author, Collection<Comment> comments) {
+        super(postID, content, author);
         this.comments = comments;
     }
 

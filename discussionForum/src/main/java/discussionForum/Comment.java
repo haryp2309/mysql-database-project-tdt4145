@@ -5,8 +5,8 @@ import static discussionForum.DatabaseController.db;
 public class Comment extends Post {
 
 
-    public Comment(int postID, String content, User author, boolean postType) {
-        super(postID, content, author, postType);
+    public Comment(int postID, String content, User author) {
+        super(postID, content, author);
     }
 
 
