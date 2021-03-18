@@ -153,7 +153,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public Collection<Thread> search(String searchWord) {
         Collection<String> attributes = new ArrayList<String>(); 
         attributes.add(PostID);
-        attributes.add(Name);
+        attributes.add(Title);
         Collection<Map<String,String>> result = select(attributes,TABLE_POST,"INNER JOIN Thread USING (PostID) WHERE PostType = \"Thread\" AND (Title LIKE %"+searchWord+"% OR Content LIKE %"+searchWord+")");
         return result.stream().map(row -> new Thread(row.get("PostID"),row.get("Title"),null,null,null)).collect(Collectors.toList());
     }
@@ -245,6 +245,11 @@ public class SQLController extends MySQLConn implements DatabaseController {
         values.put(TAG_TAG_ID, tag.getValue());
         values.put(POST_THREAD_POST_ID, Integer.toString(thread.getPostID()));
         insert(values, TABLE_TAG_ON_THREAD);
+    }
+
+    public Collection<Thread> getThreads(Folder folder){
+        select(attributes, table, additionalSQLStatements);
+        Collection<Thread> threads = new ArrayList<>();
     }
 
     private String localDateTimeConverter(LocalDateTime localDateTime){
