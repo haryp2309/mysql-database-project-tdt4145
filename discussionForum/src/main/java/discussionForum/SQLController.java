@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SQLController extends MySQLConn implements DatabaseController {
 
@@ -16,6 +17,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String TABLE_COMMENT = "Comment";
     public static final String TABLE_TAG_ON_THREAD = "TagOnThread";
     public static final String TABLE_LIKEDBY = "LikedBy";
+    public static final String TABLE_COURSE = "Course";
+    public static final String TABLE_USERINCOURSE = "UserInCourse";
 
     public static final String USER_ID = "UserID";
     public static final String USER_FIRST_NAME = "FirstName";
@@ -24,6 +27,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String USER_PASSWORD = "Password";
 
     public static final String COURSE_ID = "CourseID";
+    public static final String COURSE_NAME = "Name";
+    public static final String COURSE_TERMYEAR = "TermYear";
+    public static final String COURSE_TERM = "Term";
+    public static final String COURSE_ANOALLOWANCE = "AnonymousAllowance";
 
     public static final String POST_ID = "PostID";
     public static final String POST_CONTENT = "Content";
@@ -235,8 +242,13 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    public Collection<Map<String, Object>> coursesToUser(User user){
-        select()
+    public Collection<Course> coursesToUser(User user){
+        Collection<String> courseAttributes= new ArrayList<>(Arrays.asList(COURSE_ID, COURSE_NAME, COURSE_TERM, COURSE_TERMYEAR, COURSE_ANOALLOWANCE));
+        Collection<Map<String, String>> courseRows = select(courseAttributes, TABLE_COURSE, "NATURAL JOIN userInCourse WHERE " + user.getUserID() + "= UserID");
+        return courseRows
+                .stream()
+                .map(row -> new Course(row.get("Name"), row.get("Term"), Integer.parseInt(row.get("TermYear")), Boolean.parseBoolean(row.get("AnonymousAllowance")), new ArrayList<>()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -244,7 +256,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         HashMap<String, String> values = new HashMap<>();
         values.put(USER_ID, Integer.toString(user.getUserID()));
         values.put(POST_ID, Integer.toString(post.getPostID()));
-        values.put(POST_POSTED_TIME, localDateTimeConverter(postedTime);
+        values.put(POST_POSTED_TIME, localDateTimeConverter(postedTime));
         insert(values, TABLE_LIKEDBY);
     }
 
