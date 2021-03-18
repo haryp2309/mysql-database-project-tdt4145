@@ -2,6 +2,8 @@ package discussionForum;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface DatabaseController {
 
@@ -41,5 +43,7 @@ public interface DatabaseController {
     int likedCount(Post post);
 
     int viewedCount(Post post);
+
+    public Map<String, Object> coursesToUser(User user);
 
 }
