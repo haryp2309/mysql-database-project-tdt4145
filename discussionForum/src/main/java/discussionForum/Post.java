@@ -1,8 +1,8 @@
-package discussionForum;
+package discussionforum;
+
+import static discussionforum.DatabaseController.db;
 
 import java.time.LocalDateTime;
-
-import static discussionForum.DatabaseController.db;
 
 public abstract class Post{
     private int postID;

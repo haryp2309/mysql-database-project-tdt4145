@@ -1,9 +1,6 @@
-package discussionForum;
+package discussionforum;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import static discussionForum.DatabaseController.db;
+import static discussionforum.DatabaseController.db;
 
 public class Comment extends Post{
 

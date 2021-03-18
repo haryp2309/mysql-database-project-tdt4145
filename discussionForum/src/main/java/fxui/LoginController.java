@@ -1,11 +1,12 @@
 package fxui;
 
-import discussionForum.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+
+import discussionforum.User;
 
 public class LoginController extends AbstractController {
     @FXML

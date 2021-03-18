@@ -1,4 +1,4 @@
-package discussionForum;
+package discussionforum;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

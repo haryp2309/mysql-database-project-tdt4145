@@ -1,4 +1,4 @@
-package discussionForum;
+package discussionforum;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -220,7 +220,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public void tag(Thread thread, Tag tag) {
-        
+
     }
 
     @Override
@@ -234,10 +234,11 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     @Override
-    public void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads) {
+    public void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
 
     }
 
+    
     public static void main(String[] args) {
         SQLController db = new SQLController();
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");

@@ -1,4 +1,4 @@
-package discussionForum;
+package discussionforum;
 
 public class UserInCourse {
     private User user;

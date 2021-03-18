@@ -1,10 +1,10 @@
-package discussionForum;
+package discussionforum;
+
+import static discussionforum.DatabaseController.db;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import static discussionForum.DatabaseController.db;
 
 public class Thread extends Post{
 

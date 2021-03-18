@@ -1,10 +1,9 @@
-package discussionForum;
+package discussionforum;
 
-import java.sql.DatabaseMetaData;
+import static discussionforum.DatabaseController.db;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
-import static discussionForum.DatabaseController.db;
 
 public class Course {
     private int courseID;

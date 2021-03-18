@@ -1,4 +1,4 @@
-package discussionForum;
+package discussionforum;
 
 import java.sql.*;
 import java.util.Properties;

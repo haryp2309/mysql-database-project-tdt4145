@@ -1,12 +1,13 @@
 package fxui;
 
-import discussionForum.Forum;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import discussionforum.Forum;
 
 public abstract class AbstractController {
     private Stage stage;
