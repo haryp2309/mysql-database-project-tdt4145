@@ -19,21 +19,6 @@ public abstract class Post {
         this.postType = postType;
     }
 
-    public void setPostID(int postID) {
-        this.postID = postID;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setAuthorID(User author) {
-        this.author = author;
-    }
-
-    public void setPostType(boolean postType) {
-        this.postType = postType;
-    }
 
     public User getAuthor() {
         return author;

@@ -20,11 +20,6 @@ public class DiscussionPost extends Post {
         }
     }
 
-    public void deleteComment(Comment comment) {
-        if (this.comments.contains(comment)) {
-            this.comments.remove(comment);
-        }
-    }
 
     public void postDiscussionPost(String content, User author, Thread thread) {
         db.postDiscussionPost(content, author, getPostedTime(), thread);
