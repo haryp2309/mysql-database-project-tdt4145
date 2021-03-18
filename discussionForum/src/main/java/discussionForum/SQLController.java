@@ -21,6 +21,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String TABLE_COURSE = "Course";
     public static final String TABLE_USERINCOURSE = "UserInCourse";
     public static final String TABLE_VIEWEDBY = "ViewedBy";
+    public static final String TABLE_ROOTFOLDER = "RootFolder";
 
     public static final String USER_ID = "UserID";
     public static final String USER_FIRST_NAME = "FirstName";
@@ -52,6 +53,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     public static final String VIEWED_TIME = "ViewedTime";
     public static final String LIKED_TIME = "LikedTime";
+
+    public static final String FOLDER_ID = "FolderID";
+    public static final String FOLDER_NAME = "Name";
+    public static final String FOLDER_TYPE = "FolderType";
 
     public SQLController() {
         this.connect();
@@ -280,8 +285,18 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
-
+        Map<String, String> rootFolders = new HashMap<>();
+        rootFolders.put(FOLDER_NAME, name);
+        rootFolders.put(FOLDER_TYPE, "Root");
+        rootFolders.put(COURSE_ID, Integer.toString(course.getCourseID()));
+        insert(rootFolders, TABLE_ROOTFOLDER);
     }
+
+
+
+
+
+
 
 
     public static void main(String[] args) {
