@@ -1,5 +1,8 @@
 package discussionForum;
 
+import java.util.Collection;
+import java.util.Map;
+
 import static discussionForum.DatabaseController.db;
 
 public class Forum {
@@ -22,7 +25,7 @@ public class Forum {
         this.currentCourse = currentCourse;
     }
 
-    public String getStatistics(User user) {
+    public Collection<Map<String, String>> getStatistics(User user) {
         return db.getStatistics(user);
     }
 

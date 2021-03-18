@@ -71,8 +71,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
         if (attributes == null) {
             attributes = new ArrayList<>();
         }
-        Collection<Map<String, String>> result = new ArrayList<>();
-        try {
             String query = "SELECT ";
             query += attributes.stream()
                     .reduce((a, b) -> a + ", " + b)
@@ -82,35 +80,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
             query += table;
             query += " ";
             query += additionalSQLStatements;
-
-            System.out.println(query);
-
-            Statement stmt = this.conn.createStatement();
-            ResultSet rset = stmt.executeQuery(query);
-
-
-            while (rset.next()) {
-                if (attributes.isEmpty()) {
-                    int length = rset.getMetaData().getColumnCount();
-                    for (int i = 1; i <= length; i++) {
-                        attributes.add(rset.getMetaData().getColumnName(i));
-                    }
-                }
-                Map<String, String> map = new HashMap<>();
-                attributes.forEach(attribute -> {
-                    try {
-                        String cell = rset.getString(attribute);
-                        map.put(attribute, cell);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                });
-                result.add(map);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return result;
+        Collection<Map<String, String>> result = new ArrayList<>();
+        return customSelect(query, attributes);
 
     }
 
@@ -217,6 +188,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     private Collection<Map<String, String>> customSelect(String query, Collection<String> attributes) {
+
         System.out.println(query);
         Collection<Map<String, String>> result = new ArrayList<>();
         try {
