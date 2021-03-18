@@ -3,7 +3,8 @@ package fxui;
 public enum AvailableSceneName {
     APP("Login.fxml"),
     USER_HOME("UserHome.fxml"),
-    COURSE_HOME("CourseHome.fxml");
+    COURSE_HOME("CourseHome.fxml"),
+    SEARCH_RESULT("SearchResult.fxml");
 
     private final String value;
 

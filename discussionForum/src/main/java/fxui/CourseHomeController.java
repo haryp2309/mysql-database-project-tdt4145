@@ -3,10 +3,7 @@ package fxui;
 import discussionForum.Folder;
 import discussionForum.Thread;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -15,6 +12,14 @@ import java.util.stream.Collectors;
 public class CourseHomeController extends AbstractController {
     @FXML
     TreeView<Folder> threadTreeView;
+
+    @FXML
+    Button searchButton;
+
+    @FXML
+    TextField searchField;
+
+    @FXML Button backButton;
 
     private TreeItem<Folder> addSubFolders(Folder folder) {
         TreeItem<Folder> treeItem = new TreeItem<>(folder);
@@ -36,5 +41,12 @@ public class CourseHomeController extends AbstractController {
         });
         rootfolders.forEach(folderTreeItem -> threadTreeView.setRoot(root));
         root.setExpanded(true);
+        searchButton.setOnAction(event -> {
+            getForum().setSearchQuery(searchField.getText());
+            switchScene(AvailableSceneName.SEARCH_RESULT);
+        });
+        backButton.setOnAction(event -> {
+            switchScene(AvailableSceneName.USER_HOME);
+        });
     }
 }
