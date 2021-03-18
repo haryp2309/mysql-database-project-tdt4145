@@ -253,8 +253,13 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     public Collection<Thread> getThreads(Folder folder){
-        select(attributes, table, additionalSQLStatements);
-        Collection<Thread> threads = new ArrayList<>();
+        
+        Collection<String> attributes = new ArrayList<String>(); 
+        attributes.add(PostID);
+        attributes.add(Title);
+        Collection<Map<String,String>> result = select(attributes,TABLE_THREAD,"WHERE "+FOLDER_ID+" = "+folder.getFolderID());
+        return result.stream().map(row -> new Thread(row.get("PostID"),row.get("Title"),null,null,null)).collect(Collectors.toList());
+
     }
 
     private String localDateTimeConverter(LocalDateTime localDateTime){
