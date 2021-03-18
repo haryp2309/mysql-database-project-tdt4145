@@ -236,7 +236,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public void viewPost(User user, Post post, LocalDateTime postedTimed) {
-
+        Map<String, String> values = new HashMap<>();
+        values.put(USER_ID, Integer.toString(user.getUserID()));
+        values.put(POST_ID, Integer.toString(post.getPostID()));
     }
 
     @Override
