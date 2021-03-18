@@ -44,6 +44,6 @@ public interface DatabaseController {
 
     int viewedCount(Post post);
 
-    public Map<String, Object> coursesToUser(User user);
+    public Collection<Map<String, Object>> coursesToUser(User user);
 
 }

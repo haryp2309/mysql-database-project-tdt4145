@@ -15,12 +15,15 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String TABLE_DISCUSSION = "Discussion";
     public static final String TABLE_COMMENT = "Comment";
     public static final String TABLE_TAG_ON_THREAD = "TagOnThread";
+    public static final String TABLE_LIKEDBY = "LikedBy";
 
     public static final String USER_ID = "UserID";
     public static final String USER_FIRST_NAME = "FirstName";
     public static final String USER_LAST_NAME = "LastName";
     public static final String USER_EMAIL = "Email";
     public static final String USER_PASSWORD = "Password";
+
+    public static final String COURSE_ID = "CourseID";
 
     public static final String POST_ID = "PostID";
     public static final String POST_CONTENT = "Content";
@@ -37,7 +40,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String POST_COMMENT_DISCUSSION_ID = "DiscussionID";
 
     public static final String TAG_TAG_ID = "TagID";
-
 
     public SQLController() {
         this.connect();
@@ -188,7 +190,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         HashMap<String, String> values = new HashMap<>();
         values.put(POST_CONTENT, content);
         values.put(POST_AUTHOR_ID, Integer.toString(author.getUserID()));
-        values.put(POST_POSTED_TIME, postedTime.format(DateTimeFormatter.ISO_DATE_TIME));
+        values.put(POST_POSTED_TIME, localDateTimeConverter(postedTime));
         values.put(POST_TYPE, POST_TYPES_THREAD);
         return Integer.parseInt(Objects.requireNonNull(this.insert(values, TABLE_POST)));
     }
@@ -229,9 +231,21 @@ public class SQLController extends MySQLConn implements DatabaseController {
         insert(values, TABLE_TAG_ON_THREAD);
     }
 
+    private String localDateTimeConverter(LocalDateTime localDateTime){
+        return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    public Collection<Map<String, Object>> coursesToUser(User user){
+        select()
+    }
+
     @Override
     public void likePost(User user, Post post, LocalDateTime postedTime) {
-
+        HashMap<String, String> values = new HashMap<>();
+        values.put(USER_ID, Integer.toString(user.getUserID()));
+        values.put(POST_ID, Integer.toString(post.getPostID()));
+        values.put(POST_POSTED_TIME, localDateTimeConverter(postedTime);
+        insert(values, TABLE_LIKEDBY);
     }
 
     @Override
