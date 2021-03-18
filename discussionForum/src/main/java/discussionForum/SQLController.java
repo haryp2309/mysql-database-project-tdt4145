@@ -16,6 +16,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String TABLE_COMMENT = "Comment";
     public static final String TABLE_TAG_ON_THREAD = "TagOnThread";
     public static final String TABLE_LIKEDBY = "LikedBy";
+    public static final String TABLE_VIEWEDBY = "ViewedBy";
 
     public static final String USER_ID = "UserID";
     public static final String USER_FIRST_NAME = "FirstName";
@@ -40,6 +41,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String POST_COMMENT_DISCUSSION_ID = "DiscussionID";
 
     public static final String TAG_TAG_ID = "TagID";
+
+    public static final String VIEWED_TIME = "ViewedTime";
+    public static final String LIKED_TIME = "LikedTime";
 
     public SQLController() {
         this.connect();
@@ -236,23 +240,25 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     public Collection<Map<String, Object>> coursesToUser(User user){
-        select()
+        select();
     }
 
     @Override
-    public void likePost(User user, Post post, LocalDateTime postedTime) {
+    public void likePost(User user, Post post, LocalDateTime likedTime) {
         HashMap<String, String> values = new HashMap<>();
         values.put(USER_ID, Integer.toString(user.getUserID()));
         values.put(POST_ID, Integer.toString(post.getPostID()));
-        values.put(POST_POSTED_TIME, localDateTimeConverter(postedTime);
+        values.put(LIKED_TIME, localDateTimeConverter(likedTime));
         insert(values, TABLE_LIKEDBY);
     }
 
     @Override
-    public void viewPost(User user, Post post, LocalDateTime postedTimed) {
+    public void viewPost(User user, Post post, LocalDateTime viewedTimed) {
         Map<String, String> values = new HashMap<>();
         values.put(USER_ID, Integer.toString(user.getUserID()));
         values.put(POST_ID, Integer.toString(post.getPostID()));
+        values.put(VIEWED_TIME,localDateTimeConverter(viewedTimed));
+        insert(values,TABLE_VIEWEDBY);
     }
 
     @Override
