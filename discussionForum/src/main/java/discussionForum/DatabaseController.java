@@ -40,11 +40,8 @@ public interface DatabaseController {
     //“user name, number of posts read, number of posts created”. You don’t need to order by 
     //posts created, but the number should be displayed. The result should also include users
     //which have not read or created posts.
-    String getStatistics(User user);
+    Collection<Map<String, String>> getStatistics(User user);
 
-    int likedCount(Post post);
-
-    int viewedCount(Post post);
 
     public Collection<Course> coursesToUser(User user);
 

@@ -40,13 +40,6 @@ public abstract class Post {
         return content;
     }
 
-    public int likedCount(Post post) {
-        return db.likedCount(post);
-    }
-
-    public int viewedCount(Post post) {
-        return db.viewedCount(post);
-    }
 
 
 }
