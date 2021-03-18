@@ -9,31 +9,34 @@ import java.util.*;
 
 public class SQLController extends MySQLConn implements DatabaseController {
 
-    private static String TABLE_USER = "User";
-    private static String TABLE_POST = "Post";
-    private static String TABLE_THREAD = "Thread";
-    private static String TABLE_DISCUSSION = "Discussion";
-    private static String TABLE_COMMENT = "Comment";
+    public static final String TABLE_USER = "User";
+    public static final String TABLE_POST = "Post";
+    public static final String TABLE_THREAD = "Thread";
+    public static final String TABLE_DISCUSSION = "Discussion";
+    public static final String TABLE_COMMENT = "Comment";
+    public static final String TABLE_TAG_ON_THREAD = "TagOnThread";
 
-    private static String USER_ID = "UserID";
-    private static String USER_FIRST_NAME = "FirstName";
-    private static String USER_LAST_NAME = "LastName";
-    private static String USER_EMAIL = "Email";
-    private static String USER_PASSWORD = "Password";
+    public static final String USER_ID = "UserID";
+    public static final String USER_FIRST_NAME = "FirstName";
+    public static final String USER_LAST_NAME = "LastName";
+    public static final String USER_EMAIL = "Email";
+    public static final String USER_PASSWORD = "Password";
 
-    private static String POST_ID = "PostID";
-    private static String POST_CONTENT = "Content";
-    private static String POST_AUTHOR_ID = "AuthorID";
-    private static String POST_POSTED_TIME = "PostedTime";
-    private static String POST_TYPE = "PostType";
-    private static String POST_TYPES_THREAD = "Thread";
-    private static String POST_THREAD_TITLE = "Title";
-    private static String POST_THREAD_POST_ID = "PostID";
-    private static String POST_THREAD_FOLDER_ID = "FolderID";
-    private static String POST_DISCUSSION_POST_ID = "PostID";
-    private static String POST_DISCUSSION_THREAD_ID = "ThreadID";
-    private static String POST_COMMENT_POST_ID = "PostID";
-    private static String POST_COMMENT_DISCUSSION_ID = "DiscussionID";
+    public static final String POST_ID = "PostID";
+    public static final String POST_CONTENT = "Content";
+    public static final String POST_AUTHOR_ID = "AuthorID";
+    public static final String POST_POSTED_TIME = "PostedTime";
+    public static final String POST_TYPE = "PostType";
+    public static final String POST_TYPES_THREAD = "Thread";
+    public static final String POST_THREAD_TITLE = "Title";
+    public static final String POST_THREAD_POST_ID = "PostID";
+    public static final String POST_THREAD_FOLDER_ID = "FolderID";
+    public static final String POST_DISCUSSION_POST_ID = "PostID";
+    public static final String POST_DISCUSSION_THREAD_ID = "ThreadID";
+    public static final String POST_COMMENT_POST_ID = "PostID";
+    public static final String POST_COMMENT_DISCUSSION_ID = "DiscussionID";
+
+    public static final String TAG_TAG_ID = "TagID";
 
 
     public SQLController() {
@@ -87,7 +90,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     }
 
-    private String insert(HashMap<String, String> values, String table) {
+    private String insert(Map<String, String> values, String table) {
         if (values.isEmpty()) throw new IllegalArgumentException("Attributes can't be empty");
         String columns = values.keySet().stream()
                 .map(column -> "`" + column + "`")
@@ -220,7 +223,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public void tag(Thread thread, Tag tag) {
-
+        Map<String, String> values = new HashMap<>();
+        values.put(TAG_TAG_ID, tag.getValue());
+        values.put(POST_THREAD_POST_ID, Integer.toString(thread.getPostID()));
+        insert(values, TABLE_TAG_ON_THREAD);
     }
 
     @Override
