@@ -49,8 +49,8 @@ public class Thread extends Post {
         db.postThread(title, content, author, this.getPostedTime(), folder);
     }
 
-    public static Collection<Thread> search(String searchWord) {
-        return db.search(searchWord);
+    @Override
+    public String toString() {
+        return title+": "+getContent();
     }
-
 }

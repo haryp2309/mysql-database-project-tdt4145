@@ -56,6 +56,12 @@ public class Course {
         return db.getFolders(this);
     }
 
+
+
+    public Collection<Thread> search(String searchWord) {
+        return db.search(searchWord, this);
+    }
+
     @Override
     public String toString() {
         return courseName;

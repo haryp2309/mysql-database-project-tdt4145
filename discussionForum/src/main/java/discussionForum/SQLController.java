@@ -130,13 +130,38 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return new User(id, firstName, lastName, email);
     }
 
+
+
     @Override
-    public Collection<Thread> search(String searchWord) {
+    public Collection<Thread> search(String searchWord, Course course) {
         Collection<String> attributes = new ArrayList<String>();
         attributes.add("PostID");
-        attributes.add("Name");
-        Collection<Map<String, String>> result = select(attributes, TABLE_POST, "INNER JOIN Thread USING (PostID) WHERE PostType = \"Thread\" AND (Title LIKE %" + searchWord + "% OR Content LIKE %" + searchWord + ")");
-        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), null, null, null)).collect(Collectors.toList());
+        attributes.add("Title");
+        attributes.add("Content");
+
+        Collection<Folder> folders = getFolders(course);
+        Collection<String> folderIds = new ArrayList<>();
+        Stack<Folder> stack = new Stack<>();
+        stack.addAll(folders);
+        while (!stack.isEmpty()) {
+            Folder currentFolder = stack.pop();
+            folderIds.add(Integer.toString(currentFolder.getFolderID()));
+            stack.addAll(currentFolder.getSubfolders());
+        }
+
+        String seperatedFolderIDs = folderIds.stream().reduce((id1, id2) -> id1+" OR "+id2).orElse(null);
+        if (seperatedFolderIDs == null) {
+            return new ArrayList<>();
+        }
+        String query = "INNER JOIN Thread USING (PostID) WHERE (";
+        query += seperatedFolderIDs;
+        query += ") AND PostType = \"Thread\" AND (Title LIKE \"%";
+        query += searchWord;
+        query += "%\" OR Content LIKE \"%";
+        query += searchWord;
+        query += "%\")";
+        Collection<Map<String, String>> result = select(attributes, TABLE_POST, query);
+        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), row.get("Content"), null, null)).collect(Collectors.toList());
     }
 
     @Override
@@ -382,7 +407,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         User user = User.signIn("a@a", "a");
         Course course = db.coursesToUser(user).iterator().next();
-        System.out.println(db.getFolders(course));
+        System.out.println(db.search("grov", course));
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
         //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
         //DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
