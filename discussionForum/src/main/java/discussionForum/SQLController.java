@@ -3,6 +3,7 @@ package discussionForum;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -21,6 +22,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String TABLE_COURSE = "Course";
     public static final String TABLE_USERINCOURSE = "UserInCourse";
     public static final String TABLE_VIEWEDBY = "ViewedBy";
+    public static final String TABLE_FOLDER = "Folder";
+    public static final String TABLE_ROOT_FOLDER = "rootfolder";
+    public static final String TABLE_SUB_FOLDER = "subfolder";
 
     public static final String USER_ID = "UserID";
     public static final String USER_FIRST_NAME = "FirstName";
@@ -152,10 +156,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
     @Override
     public Collection<Thread> search(String searchWord) {
         Collection<String> attributes = new ArrayList<String>(); 
-        attributes.add(PostID);
-        attributes.add(Name);
+        attributes.add("PostID");
+        attributes.add("Name");
         Collection<Map<String,String>> result = select(attributes,TABLE_POST,"INNER JOIN Thread USING (PostID) WHERE PostType = \"Thread\" AND (Title LIKE %"+searchWord+"% OR Content LIKE %"+searchWord+")");
-        return result.stream().map(row -> new Thread(row.get("PostID"),row.get("Title"),null,null,null)).collect(Collectors.toList());
+        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")),row.get("Title"),null,null,null)).collect(Collectors.toList());
     }
 
     @Override
@@ -172,6 +176,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public int viewedCount(Post post) {
         return 0;
     }
+
+
 
     @Override
     public boolean isEmailUsed(String email) {
@@ -253,10 +259,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     public Collection<Course> coursesToUser(User user){
         Collection<String> courseAttributes= new ArrayList<>(Arrays.asList(COURSE_ID, COURSE_NAME, COURSE_TERM, COURSE_TERMYEAR, COURSE_ANOALLOWANCE));
-        Collection<Map<String, String>> courseRows = select(courseAttributes, TABLE_COURSE, "NATURAL JOIN userInCourse WHERE " + user.getUserID() + "= UserID");
+        Collection<Map<String, String>> courseRows = select(courseAttributes, TABLE_COURSE, "NATURAL JOIN userInCourse WHERE " + user.getUserID() + " = UserID");
         return courseRows
                 .stream()
-                .map(row -> new Course(row.get("Name"), row.get("Term"), Integer.parseInt(row.get("TermYear")), Boolean.parseBoolean(row.get("AnonymousAllowance")), new ArrayList<>()))
+                .map(row -> new Course(Integer.parseInt(row.get("CourseID")),row.get("Name"), row.get("Term"), LocalDate.parse(row.get("TermYear")).getYear(), Boolean.parseBoolean(row.get("AnonymousAllowance")), new ArrayList<>()))
                 .collect(Collectors.toList());
     }
 
@@ -283,11 +289,42 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     }
 
+    public Collection<Folder> getFolders(Course course) {
+        Collection<String> attributes = new ArrayList<>();
+        attributes.add("FolderID");
+        attributes.add("Title");
+        String additional = "NATURAL JOIN "+TABLE_ROOT_FOLDER+" WHERE CourseID = \""+course.getCourseID()+"\"";
+        Collection<Map<String, String>> result = select(attributes,TABLE_FOLDER,additional);
+
+        return result.stream()
+                .map(row -> {
+                    Collection<Folder> subFolders = getSubFolders(Integer.parseInt(row.get("FolderID")));
+                    return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders, null);
+                })
+                .collect(Collectors.toList());
+    }
+
+    private Collection<Folder> getSubFolders(int parentID) {
+        Collection<String> attributes = new ArrayList<>();
+        attributes.add("FolderID");
+        attributes.add("Title");
+        String additional = "NATURAL JOIN "+TABLE_SUB_FOLDER+" WHERE ParentFolderID = \""+parentID+"\"";
+        Collection<Map<String, String>> result = select(attributes,TABLE_FOLDER,additional);
+        return result.stream()
+                .map(row -> {
+                    Collection<Folder> subFolders = getSubFolders(Integer.parseInt(row.get("FolderID")));
+                    return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders, null);
+                })
+                .collect(Collectors.toList());
+    }
+
 
     public static void main(String[] args) {
         SQLController db = new SQLController();
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
-        User user = User.signIn("ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
+        User user = User.signIn("a@a", "a");
+        Course course = db.coursesToUser(user).iterator().next();
+        System.out.println(db.getFolders(course));
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
         //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
         //DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());

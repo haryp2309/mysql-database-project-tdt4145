@@ -2,6 +2,8 @@ package discussionForum;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import static discussionForum.DatabaseController.db;
+
 
 public class Course {
     private int courseID;
@@ -11,12 +13,13 @@ public class Course {
     private boolean anonymousAllowance;
     private Collection<Folder> folders = new ArrayList<Folder>();
 
-    public Course(String courseName, String term, int termYear, boolean anonymousAllowance, Collection<Folder> folders) {
+    public Course(int courseID, String courseName, String term, int termYear, boolean anonymousAllowance, Collection<Folder> folders) {
         this.courseName = courseName;
         this.term = term;
         this.termYear = termYear;
         this.anonymousAllowance = anonymousAllowance;
         this.folders = folders;
+        this.courseID = courseID;
     }
 
     public int getCourseID() {
@@ -49,6 +52,12 @@ public class Course {
         }
     }
 
+    public Collection<Folder> getFolders() {
+        return db.getFolders(this);
+    }
 
-
+    @Override
+    public String toString() {
+        return courseName;
+    }
 }

@@ -1,5 +1,8 @@
 package discussionForum;
 
+import java.util.Collection;
+import java.util.Map;
+
 import static discussionForum.DatabaseController.db;
 
 public class User {
@@ -42,6 +45,9 @@ public class User {
         return lastName;
     }
 
+    public Collection<Course> getCourses() {
+        return db.coursesToUser(this);
+    }
 
     public int getUserID() {
         return userID;

@@ -43,6 +43,12 @@ public class Folder {
         }
     }
 
+    public Collection<Folder> getSubfolders() {
+        return subfolders;
+    }
 
-
+    @Override
+    public String toString() {
+        return name;
+    }
 }

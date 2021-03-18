@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxui.CourseHomeController">
+   <children>
+      <Label layoutX="71.0" layoutY="44.0" text="Folders" />
+      <TreeView fx:id="threadTreeView" layoutX="62.0" layoutY="61.0" prefHeight="291.0" prefWidth="485.0" />
+   </children>
+</AnchorPane>

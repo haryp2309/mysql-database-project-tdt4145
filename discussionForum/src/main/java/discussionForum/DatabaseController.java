@@ -46,4 +46,6 @@ public interface DatabaseController {
 
     public Collection<Course> coursesToUser(User user);
 
+    public Collection<Folder> getFolders(Course course);
+
 }
