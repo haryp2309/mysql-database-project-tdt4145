@@ -1,6 +1,4 @@
-package discussionforum;
-
-import static discussionforum.DatabaseController.db;
+package discussionForum;
 
 import java.util.ArrayList;
 import java.util.Collection;

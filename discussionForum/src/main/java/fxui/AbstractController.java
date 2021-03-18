@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import discussionforum.Forum;
+import discussionForum.Forum;
 
 public abstract class AbstractController {
     private Stage stage;

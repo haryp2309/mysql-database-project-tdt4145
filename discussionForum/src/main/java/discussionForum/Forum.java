@@ -1,6 +1,6 @@
-package discussionforum;
+package discussionForum;
 
-import static discussionforum.DatabaseController.db;
+import static discussionForum.DatabaseController.db;
 
 public class Forum {
     User currentUser;

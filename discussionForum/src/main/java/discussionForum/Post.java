@@ -1,10 +1,10 @@
-package discussionforum;
+package discussionForum;
 
-import static discussionforum.DatabaseController.db;
+import static discussionForum.DatabaseController.db;
 
 import java.time.LocalDateTime;
 
-public abstract class Post{
+public abstract class Post {
     private int postID;
     private String content;
     private User author;
@@ -60,14 +60,13 @@ public abstract class Post{
         return content;
     }
 
-    public int likedCount(Post post){
+    public int likedCount(Post post) {
         return db.likedCount(post);
     }
 
-    public int viewedCount(Post post){
+    public int viewedCount(Post post) {
         return db.viewedCount(post);
     }
-
 
 
 }

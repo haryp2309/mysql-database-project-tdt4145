@@ -1,12 +1,11 @@
-package discussionforum;
+package discussionForum;
 
-import static discussionforum.DatabaseController.db;
+import static discussionForum.DatabaseController.db;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class DiscussionPost extends Post{
+public class DiscussionPost extends Post {
 
     private Collection<Comment> comments = new ArrayList<Comment>();
 
@@ -15,22 +14,21 @@ public class DiscussionPost extends Post{
         this.comments = comments;
     }
 
-    public void addComments(Comment comment){
-        if(!this.comments.contains(comment)){
+    public void addComments(Comment comment) {
+        if (!this.comments.contains(comment)) {
             this.comments.add(comment);
         }
     }
 
-    public void deleteComment(Comment comment){
-        if(this.comments.contains(comment)){
+    public void deleteComment(Comment comment) {
+        if (this.comments.contains(comment)) {
             this.comments.remove(comment);
         }
     }
 
-    public void postDiscussionPost(String content, User author, Thread thread){
+    public void postDiscussionPost(String content, User author, Thread thread) {
         db.postDiscussionPost(content, author, getPostedTime(), thread);
     }
-
 
 
 }

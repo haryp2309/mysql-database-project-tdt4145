@@ -1,4 +1,4 @@
-package discussionforum;
+package discussionForum;
 
 public enum Tag {
     QUESTION("Question"),

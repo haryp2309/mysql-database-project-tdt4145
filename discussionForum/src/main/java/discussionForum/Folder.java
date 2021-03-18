@@ -1,11 +1,11 @@
-package discussionforum;
+package discussionForum;
 
-import static discussionforum.DatabaseController.db;
+import static discussionForum.DatabaseController.db;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Folder{
+public class Folder {
 
     private int folderID;
     private String name;
@@ -22,7 +22,8 @@ public class Folder{
     public int getFolderID() {
         return folderID;
     }
-    public static void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course){
+
+    public static void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
         db.createFolder(name, subfolders, threads, course);
     }
 
@@ -39,14 +40,14 @@ public class Folder{
         this.name = name;
     }
 
-    public void addSubfolder(Folder subfolder){
-        if(!this.subfolders.contains(subfolder)){
+    public void addSubfolder(Folder subfolder) {
+        if (!this.subfolders.contains(subfolder)) {
             this.subfolders.add(subfolder);
         }
     }
 
-    public void deleteSubfolder(Folder subfolder){
-        if(this.subfolders.contains(subfolder)){
+    public void deleteSubfolder(Folder subfolder) {
+        if (this.subfolders.contains(subfolder)) {
             this.subfolders.remove(subfolder);
         }
     }

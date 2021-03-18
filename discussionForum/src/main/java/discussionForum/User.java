@@ -1,16 +1,14 @@
-package discussionforum;
-import static discussionforum.DatabaseController.db;
+package discussionForum;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import static discussionForum.DatabaseController.db;
 
-public class User{
+public class User {
     private int userID;
     private String firstName;
     private String lastName;
     private String email;
 
-    public User(int userID, String firstName, String lastName, String email){
+    public User(int userID, String firstName, String lastName, String email) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -61,7 +59,7 @@ public class User{
         return userID;
     }
 
-    public void setUserID (int userID){
+    public void setUserID(int userID) {
         this.userID = userID;
     }
 

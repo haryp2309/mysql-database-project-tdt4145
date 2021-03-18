@@ -1,8 +1,8 @@
-package discussionforum;
+package discussionForum;
 
-import static discussionforum.DatabaseController.db;
+import static discussionForum.DatabaseController.db;
 
-public class Comment extends Post{
+public class Comment extends Post {
 
 
     public Comment(int postID, String content, User author, boolean postType) {
@@ -10,7 +10,7 @@ public class Comment extends Post{
     }
 
 
-    public void postComment(String content, User author, DiscussionPost discussionPost){
+    public void postComment(String content, User author, DiscussionPost discussionPost) {
         db.postComment(content, author, getPostedTime(), discussionPost);
     }
 }

@@ -1,4 +1,4 @@
-package discussionforum;
+package discussionForum;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -238,7 +238,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     }
 
-    
+
     public static void main(String[] args) {
         SQLController db = new SQLController();
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
