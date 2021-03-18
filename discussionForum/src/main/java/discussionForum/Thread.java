@@ -9,10 +9,12 @@ public class Thread extends Post {
 
     private Collection<DiscussionPost> discussionPosts = new ArrayList<>();
     private Collection<Tag> tags = new ArrayList<>();
+    private String title ;
 
-    public Thread(int postID, String content, User author, boolean postType, Collection<DiscussionPost> discussionPosts) {
+    public Thread(int postID, String title, String content, User author, boolean postType, Collection<DiscussionPost> discussionPosts) {
         super(postID, content, author, postType);
         this.discussionPosts = discussionPosts;
+        this.title = title;
     }
 
     public void addDiscussionPost(DiscussionPost discussionPost) {
