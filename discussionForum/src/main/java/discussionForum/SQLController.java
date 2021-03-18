@@ -143,6 +143,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public Collection<Integer> search(String searchWord) {
+        Collection<String> attributes = new ArrayList<String>(); 
+        attributes.add(PostID);
+        Collection<Map<String,String>> result = select(attributes,TABLE_POST,"INNER JOIN TABLE_THREAD USING (PostID) WHERE PostType = \"Thread\" AND (Title LIKE %"+searchWord+"% OR Content LIKE %"+searchWord+")");
+        
         return null;
     }
 
