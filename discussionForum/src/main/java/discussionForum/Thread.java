@@ -38,6 +38,6 @@ public class Thread extends Post {
 
     @Override
     public String toString() {
-        return title+": "+getContent();
+        return title+": "+getContent()+" - by "+getAuthor();
     }
 }
