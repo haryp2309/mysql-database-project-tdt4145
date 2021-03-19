@@ -474,7 +474,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     public static void main(String[] args) {
         SQLController db = new SQLController();
-        //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
+        //øøøUser user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         User user = User.signIn("a@a", "a");
         Course course = db.coursesToUser(user).iterator().next();
         Thread thread = db.search("ER", course).iterator().next();
