@@ -275,7 +275,12 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }
     }
 
-    
+    public boolean isUserInstructor(User user, Course course){
+        Collection<String> attributes = new ArrayList<String>();
+        attributes.add("IsInstructor");
+        Collection<Map<String, String>> result = select(attributes, TABLE_USERINCOURSE, "WHERE("+USER_ID+" = "+user.getUserID()+"AND"+COURSE_ID+" = "+course.getCourseID()+")");
+        return result.stream().map(row -> Boolean.parseBoolean(row.get("IsInstructor"))).findFirst().get();
+    }
 
     private int post(String content, User author, LocalDateTime postedTime) {
         HashMap<String, String> values = new HashMap<>();
