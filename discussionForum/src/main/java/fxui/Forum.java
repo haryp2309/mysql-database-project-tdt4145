@@ -1,9 +1,7 @@
 package fxui;
 
-import discussionForum.Course;
-import discussionForum.Folder;
+import discussionForum.*;
 import discussionForum.Thread;
-import discussionForum.User;
 
 import java.util.Collection;
 import java.util.Map;
@@ -15,6 +13,15 @@ public class Forum {
     private Course currentCourse;
     private String searchQuery;
     private Thread currentThread;
+    private DiscussionPost currentDiscussionPost;
+
+    public void setCurrentDiscussionPost(DiscussionPost currentDiscussionPost) {
+        this.currentDiscussionPost = currentDiscussionPost;
+    }
+
+    public DiscussionPost getCurrentDiscussionPost() {
+        return currentDiscussionPost;
+    }
 
     public Folder getCurrentFolder() {
         return currentFolder;

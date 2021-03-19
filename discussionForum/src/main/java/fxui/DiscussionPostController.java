@@ -33,5 +33,6 @@ public class DiscussionPostController extends AbstractController {
             switchScene(AvailableSceneName.THREAD_VIEW);
         });
         commentListView.getItems().addAll(currentDiscussionPost.getComments());
+        originalThread.setText("From thread: "+getForum().getCurrentThread().getTitle());
     }
 }
