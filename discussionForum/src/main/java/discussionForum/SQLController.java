@@ -242,7 +242,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
             throwables.printStackTrace();
         }
         return result;
-
     }
 
 
@@ -337,7 +336,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         Collection<String> attributes = new ArrayList<String>();
         attributes.add("PostID");
         Collection<Map<String, String>> result = select(attributes, TABLE_DISCUSSION, "WHERE " + POST_ID + " = " +thread.getPostID());
-        return result.stream().map(row -> new DiscussionPost(Integer.parseInt(row.get("PostID")), null, null, null, null)).collect(Collectors.toList());
+        return result.stream().map(row -> new DiscussionPost(Integer.parseInt(row.get("PostID")), null, null, null)).collect(Collectors.toList());
 
     }
 
@@ -345,7 +344,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         Collection<String> attributes = new ArrayList<String>();
         attributes.add("PostID");
         Collection<Map<String, String>> result = select(attributes, TABLE_COMMENT, "WHERE " + POST_ID + " = " +discussionPost.getPostID());
-        return result.stream().map(row -> new Comment(Integer.parseInt(row.get("PostID")), null, null, null, null)).collect(Collectors.toList());
+        return result.stream().map(row -> new Comment(Integer.parseInt(row.get("PostID")), null, null)).collect(Collectors.toList());
 
     }
 
