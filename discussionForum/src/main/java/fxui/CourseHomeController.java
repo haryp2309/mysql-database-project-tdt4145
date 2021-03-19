@@ -21,6 +21,8 @@ public class CourseHomeController extends AbstractController {
 
     @FXML Button backButton;
 
+    @FXML Button threadsButton;
+
     private TreeItem<Folder> addSubFolders(Folder folder) {
         TreeItem<Folder> treeItem = new TreeItem<>(folder);
         folder.getSubfolders().forEach(subFolder -> {
@@ -47,6 +49,11 @@ public class CourseHomeController extends AbstractController {
         });
         backButton.setOnAction(event -> {
             switchScene(AvailableSceneName.USER_HOME);
+        });
+        threadsButton.setOnAction(event -> {
+            Folder folder = threadTreeView.getSelectionModel().getSelectedItem().getValue();
+            getForum().setCurrentFolder(folder);
+            switchScene(AvailableSceneName.THREADS_IN_FOLDER);
         });
     }
 }

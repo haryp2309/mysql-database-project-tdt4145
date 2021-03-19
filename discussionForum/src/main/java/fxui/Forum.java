@@ -14,6 +14,9 @@ public class Forum {
     private String searchQuery;
     private Thread currentThread;
     private DiscussionPost currentDiscussionPost;
+    private Folder currentFolder;
+
+
 
     public void setCurrentDiscussionPost(DiscussionPost currentDiscussionPost) {
         this.currentDiscussionPost = currentDiscussionPost;
@@ -31,7 +34,6 @@ public class Forum {
         this.currentFolder = currentFolder;
     }
 
-    private Folder currentFolder;
 
     public Thread getCurrentThread() {
         return currentThread;

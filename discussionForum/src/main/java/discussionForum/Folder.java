@@ -24,8 +24,8 @@ public class Folder {
         return folderID;
     }
 
-    public Collection<Thread> getThreads(Folder folder){
-        return db.getThreads(folder);
+    public Collection<Thread> getThreads(){
+        return db.getThreads(this);
     }
 
     public static void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {

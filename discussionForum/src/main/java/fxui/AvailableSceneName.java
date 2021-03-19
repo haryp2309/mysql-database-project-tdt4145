@@ -7,7 +7,8 @@ public enum AvailableSceneName {
     SEARCH_RESULT("SearchResult.fxml"),
     MAKE_THREAD("MakeThread.html"),
     THREAD_VIEW("ThreadView.fxml"),
-    DISCUSSION_POST_VIEW("DiscussionPost.fxml");
+    DISCUSSION_POST_VIEW("DiscussionPost.fxml"),
+    THREADS_IN_FOLDER("ThreadsInFolder.fxml");
 
     private final String value;
 
