@@ -31,4 +31,11 @@ public class ThreadViewController extends AbstractController {
         });
         discussionPostListView.getItems().addAll(currentThread.getDiscussionPosts());
     }
+
+    @FXML
+    protected  void onClicked() {
+        DiscussionPost thread = discussionPostListView.getSelectionModel().getSelectedItem();
+        getForum().setCurrentDiscussionPost(thread);
+        switchScene(AvailableSceneName.DISCUSSION_POST_VIEW);
+    }
 }

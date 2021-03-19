@@ -5,7 +5,9 @@ public enum AvailableSceneName {
     USER_HOME("UserHome.fxml"),
     COURSE_HOME("CourseHome.fxml"),
     SEARCH_RESULT("SearchResult.fxml"),
-    MAKE_THREAD("MakeThread.html");
+    MAKE_THREAD("MakeThread.html"),
+    THREAD_VIEW("ThreadView.fxml"),
+    DISCUSSION_POST_VIEW("DiscussionPost.fxml");
 
     private final String value;
 

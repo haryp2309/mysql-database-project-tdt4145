@@ -27,7 +27,9 @@ public class SearchResultController extends AbstractController {
     @FXML
     protected  void onClicked() {
         Thread thread = threadListView.getSelectionModel().getSelectedItem();
-        getForum().setCurrentThread(thread);
-        switchScene(AvailableSceneName.THREAD_VIEW);
+        if (thread != null) {
+            getForum().setCurrentThread(thread);
+            switchScene(AvailableSceneName.THREAD_VIEW);
+        }
     }
 }

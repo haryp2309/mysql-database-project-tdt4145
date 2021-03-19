@@ -348,6 +348,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public Collection<Comment> getComments(DiscussionPost discussionPost){
         Collection<String> attributes = new ArrayList<String>();
         attributes.add("PostID");
+        attributes.add("Content");
+        attributes.add("AuthorID");
+        attributes.add("FirstName");
+        attributes.add("LastName");
         String additional = "NATURAL JOIN ";
         additional += TABLE_COMMENT;
         additional += " INNER JOIN ";
@@ -356,8 +360,18 @@ public class SQLController extends MySQLConn implements DatabaseController {
         additional += discussionPost.getPostID();
         additional += "\"";
         Collection<Map<String, String>> result = select(attributes, TABLE_POST, additional);
-        return result.stream().map(row -> new Comment(Integer.parseInt(row.get("PostID")), null, null)).collect(Collectors.toList());
+        return result.stream().map(row -> {
+            int postId = Integer.parseInt(row.get("PostID"));
+            User author = new User(
+                    Integer.parseInt(row.get("AuthorID")),
+                    row.get("FirstName"),
+                    row.get("LastName"),
+                    null
+            );
+            String content = row.get("Content");
+            return new Comment(postId, content, author);
 
+        }).collect(Collectors.toList());
     }
 
     private String localDateTimeConverter(LocalDateTime localDateTime) {
