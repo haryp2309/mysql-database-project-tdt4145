@@ -25,5 +25,8 @@ public class DiscussionPost extends Post {
         db.postDiscussionPost(content, author, getPostedTime(), thread);
     }
 
-
+    @Override
+    public String toString() {
+        return getContent();
+    }
 }

@@ -1,6 +1,7 @@
 package fxui;
 
 import discussionForum.Course;
+import discussionForum.Thread;
 import discussionForum.User;
 
 import java.util.Collection;
@@ -12,6 +13,15 @@ public class Forum {
     private User currentUser;
     private Course currentCourse;
     private String searchQuery;
+    private Thread currentThread;
+
+    public Thread getCurrentThread() {
+        return currentThread;
+    }
+
+    public void setCurrentThread(Thread currentThread) {
+        this.currentThread = currentThread;
+    }
 
     public String getSearchQuery() {
         return searchQuery;

@@ -161,7 +161,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query += searchWord;
         query += "%\")";
         Collection<Map<String, String>> result = select(attributes, TABLE_POST, query);
-        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), row.get("Content"), null, null)).collect(Collectors.toList());
+        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), row.get("Content"), null)).collect(Collectors.toList());
     }
 
     @Override
@@ -327,7 +327,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("PostID");
         attributes.add("Title");
         Collection<Map<String, String>> result = select(attributes, TABLE_THREAD, "WHERE " + FOLDER_ID + " = " + folder.getFolderID());
-        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), null, null, null)).collect(Collectors.toList());
+        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), null, null)).collect(Collectors.toList());
 
     }
 
@@ -387,6 +387,37 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Collection<DiscussionPost> getDiscussionPosts(Thread thread) {
+        Collection<String> attributes = new ArrayList<>();
+        attributes.add("PostID");
+        attributes.add("Content");
+        attributes.add("PostedTime");
+        attributes.add("AuthorID");
+        attributes.add("FirstName");
+        attributes.add("LastName");
+        String additional = "NATURAL JOIN ";
+        additional += TABLE_DISCUSSION;
+        additional += " INNER JOIN ";
+        additional += TABLE_USER;
+        additional += " ON AuthorID = UserID WHERE ThreadID = \"";
+        additional += thread.getPostID();
+        additional += "\"";
+        return select(attributes, TABLE_POST,additional).stream()
+                .map(row -> {
+                    int postID = Integer.parseInt(row.get("PostID"));
+                    String content = row.get("Content");
+                    User author = new User(
+                            Integer.parseInt(row.get("AuthorID")),
+                            row.get("FirstName"),
+                            row.get("LastName"),
+                            null
+                    );
+                    return new DiscussionPost(postID, content, author, null);
+                })
+                .collect(Collectors.toList());
+    }
+
     private Collection<Folder> getSubFolders(int parentID) {
         Collection<String> attributes = new ArrayList<>();
         attributes.add("FolderID");
@@ -402,12 +433,14 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
 
+
     public static void main(String[] args) {
         SQLController db = new SQLController();
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         User user = User.signIn("a@a", "a");
         Course course = db.coursesToUser(user).iterator().next();
-        System.out.println(db.search("grov", course));
+        Thread thread = db.search("ER", course).iterator().next();
+        System.out.println(db.getDiscussionPosts(thread));
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
         //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
         //DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());

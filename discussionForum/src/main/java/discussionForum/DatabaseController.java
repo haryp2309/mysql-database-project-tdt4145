@@ -47,4 +47,6 @@ public interface DatabaseController {
 
     public Collection<Folder> getFolders(Course course);
 
+    public Collection<DiscussionPost> getDiscussionPosts(Thread thread);
+
 }

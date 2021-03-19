@@ -4,7 +4,8 @@ public enum AvailableSceneName {
     APP("Login.fxml"),
     USER_HOME("UserHome.fxml"),
     COURSE_HOME("CourseHome.fxml"),
-    SEARCH_RESULT("SearchResult.fxml");
+    SEARCH_RESULT("SearchResult.fxml"),
+    THREAD_VIEW("ThreadView.fxml");
 
     private final String value;
 

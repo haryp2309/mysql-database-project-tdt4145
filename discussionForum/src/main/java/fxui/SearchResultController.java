@@ -1,5 +1,6 @@
 package fxui;
 
+import discussionForum.Course;
 import discussionForum.Thread;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,5 +21,13 @@ public class SearchResultController extends AbstractController {
         });
         String searchQuery = getForum().getSearchQuery();
         threadListView.getItems().addAll(getForum().getCurrentCourse().search(searchQuery));
+
+    }
+
+    @FXML
+    protected  void onClicked() {
+        Thread thread = threadListView.getSelectionModel().getSelectedItem();
+        getForum().setCurrentThread(thread);
+        switchScene(AvailableSceneName.THREAD_VIEW);
     }
 }

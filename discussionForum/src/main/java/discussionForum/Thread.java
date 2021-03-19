@@ -7,26 +7,16 @@ import java.util.Collection;
 
 public class Thread extends Post {
 
-    private Collection<DiscussionPost> discussionPosts = new ArrayList<>();
     private Collection<Tag> tags = new ArrayList<>();
     private String title ;
 
-    public Thread(int postID, String title, String content, User author, Collection<DiscussionPost> discussionPosts) {
+    public Thread(int postID, String title, String content, User author) {
         super(postID, content, author);
-        this.discussionPosts = discussionPosts;
         this.title = title;
     }
 
-    public void addDiscussionPost(DiscussionPost discussionPost) {
-        if (!this.discussionPosts.contains(discussionPost)) {
-            this.discussionPosts.add(discussionPost);
-        }
-    }
-
-    public void deleteDiscussionPost(DiscussionPost discussionPost) {
-        if (this.discussionPosts.contains(discussionPost)) {
-            this.discussionPosts.remove(discussionPost);
-        }
+    public Collection<DiscussionPost> getDiscussionPosts() {
+        return db.getDiscussionPosts(this);
     }
 
     public void addTag(Tag tag) {
