@@ -332,18 +332,25 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     }
 
-    public Collection<DiscussionPost> getDiscussionPosts(Thread thread){
+    /*public Collection<DiscussionPost> getDiscussionPosts(Thread thread){
         Collection<String> attributes = new ArrayList<String>();
         attributes.add("PostID");
         Collection<Map<String, String>> result = select(attributes, TABLE_DISCUSSION, "WHERE " + POST_ID + " = " +thread.getPostID());
         return result.stream().map(row -> new DiscussionPost(Integer.parseInt(row.get("PostID")), null, null, null)).collect(Collectors.toList());
 
-    }
+    }*/
 
     public Collection<Comment> getComments(DiscussionPost discussionPost){
         Collection<String> attributes = new ArrayList<String>();
         attributes.add("PostID");
-        Collection<Map<String, String>> result = select(attributes, TABLE_COMMENT, "WHERE " + POST_ID + " = " +discussionPost.getPostID());
+        String additional = "NATURAL JOIN ";
+        additional += TABLE_COMMENT;
+        additional += " INNER JOIN ";
+        additional += TABLE_USER;
+        additional += " ON AuthorID = UserID WHERE DiscussionID = \"";
+        additional += discussionPost.getPostID();
+        additional += "\"";
+        Collection<Map<String, String>> result = select(attributes, TABLE_POST, additional);
         return result.stream().map(row -> new Comment(Integer.parseInt(row.get("PostID")), null, null)).collect(Collectors.toList());
 
     }
@@ -457,7 +464,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
         User user = User.signIn("a@a", "a");
         Course course = db.coursesToUser(user).iterator().next();
         Thread thread = db.search("ER", course).iterator().next();
-        System.out.println(db.getDiscussionPosts(thread));
+        DiscussionPost discussionPost = db.getDiscussionPosts(thread).iterator().next();
+        System.out.println(db.getComments(discussionPost));
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
         //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
         //DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());

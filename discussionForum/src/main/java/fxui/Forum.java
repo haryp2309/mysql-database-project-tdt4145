@@ -1,6 +1,7 @@
 package fxui;
 
 import discussionForum.Course;
+import discussionForum.DiscussionPost;
 import discussionForum.Thread;
 import discussionForum.User;
 
@@ -14,6 +15,15 @@ public class Forum {
     private Course currentCourse;
     private String searchQuery;
     private Thread currentThread;
+    private DiscussionPost currentDiscussionPost;
+
+    public DiscussionPost getCurrentDiscussionPost() {
+        return currentDiscussionPost;
+    }
+
+    public void setCurrentDiscussionPost(DiscussionPost currentDiscussionPost) {
+        this.currentDiscussionPost = currentDiscussionPost;
+    }
 
     public Thread getCurrentThread() {
         return currentThread;
