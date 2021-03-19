@@ -33,6 +33,8 @@ public interface DatabaseController {
 
     Collection<DiscussionPost> getDiscussionPosts (Thread thread);
 
+    Collection<Comment> getComments (DiscussionPost discussionPost);
+
     //"A student searches for posts with a specific keyword “WAL”. 
     //The return value of this should be a list of ids of posts matching the keyword."
     Collection<Thread> search(String searchWord, Course course);

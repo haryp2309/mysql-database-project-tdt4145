@@ -341,6 +341,14 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     }
 
+    public Collection<Comment> getComments(DiscussionPost discussionPost){
+        Collection<String> attributes = new ArrayList<String>();
+        attributes.add("PostID");
+        Collection<Map<String, String>> result = select(attributes, TABLE_COMMENT, "WHERE " + POST_ID + " = " +discussionPost.getPostID());
+        return result.stream().map(row -> new Comment(Integer.parseInt(row.get("PostID")), null, null, null, null)).collect(Collectors.toList());
+
+    }
+
     private String localDateTimeConverter(LocalDateTime localDateTime) {
         return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
     }
