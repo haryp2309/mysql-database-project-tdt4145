@@ -276,6 +276,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }
     }
 
+    
+
     private int post(String content, User author, LocalDateTime postedTime) {
         HashMap<String, String> values = new HashMap<>();
         values.put(POST_CONTENT, content);
@@ -328,6 +330,14 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("Title");
         Collection<Map<String, String>> result = select(attributes, TABLE_THREAD, "WHERE " + FOLDER_ID + " = " + folder.getFolderID());
         return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), null, null, null)).collect(Collectors.toList());
+
+    }
+
+    public Collection<DiscussionPost> getDiscussionPosts(Thread thread){
+        Collection<String> attributes = new ArrayList<String>();
+        attributes.add("PostID");
+        Collection<Map<String, String>> result = select(attributes, TABLE_DISCUSSION, "WHERE " + POST_ID + " = " +thread.getPostID());
+        return result.stream().map(row -> new DiscussionPost(Integer.parseInt(row.get("PostID")), null, null, null, null)).collect(Collectors.toList());
 
     }
 
