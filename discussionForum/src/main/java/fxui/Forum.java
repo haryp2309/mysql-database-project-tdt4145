@@ -1,6 +1,7 @@
 package fxui;
 
 import discussionForum.Course;
+import discussionForum.Folder;
 import discussionForum.Thread;
 import discussionForum.User;
 
@@ -14,6 +15,16 @@ public class Forum {
     private Course currentCourse;
     private String searchQuery;
     private Thread currentThread;
+
+    public Folder getCurrentFolder() {
+        return currentFolder;
+    }
+
+    public void setCurrentFolder(Folder currentFolder) {
+        this.currentFolder = currentFolder;
+    }
+
+    private Folder currentFolder;
 
     public Thread getCurrentThread() {
         return currentThread;

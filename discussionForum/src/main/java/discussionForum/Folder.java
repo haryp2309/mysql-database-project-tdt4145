@@ -2,6 +2,7 @@ package discussionForum;
 
 import static discussionForum.DatabaseController.db;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -49,6 +50,10 @@ public class Folder {
 
     public Collection<Folder> getSubfolders() {
         return subfolders;
+    }
+
+    public void postThread(String title, String content, LocalDateTime postedTimed, User author) {
+        db.postThread(title, content, author, postedTimed, this);
     }
 
     @Override

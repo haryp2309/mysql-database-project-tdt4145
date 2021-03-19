@@ -35,9 +35,6 @@ public class Thread extends Post {
         return title;
     }
 
-    public void postThread(String title, String content, User author, Folder folder) {
-        db.postThread(title, content, author, this.getPostedTime(), folder);
-    }
 
     @Override
     public String toString() {
