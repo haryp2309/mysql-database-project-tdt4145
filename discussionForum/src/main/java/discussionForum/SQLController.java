@@ -242,7 +242,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
             throwables.printStackTrace();
         }
         return result;
-
     }
 
 
@@ -275,6 +274,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
             return new User(id, firstName, lastName, email);
         }
     }
+
+    
 
     private int post(String content, User author, LocalDateTime postedTime) {
         HashMap<String, String> values = new HashMap<>();
@@ -328,6 +329,22 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("Title");
         Collection<Map<String, String>> result = select(attributes, TABLE_THREAD, "WHERE " + FOLDER_ID + " = " + folder.getFolderID());
         return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), null, null)).collect(Collectors.toList());
+
+    }
+
+    public Collection<DiscussionPost> getDiscussionPosts(Thread thread){
+        Collection<String> attributes = new ArrayList<String>();
+        attributes.add("PostID");
+        Collection<Map<String, String>> result = select(attributes, TABLE_DISCUSSION, "WHERE " + POST_ID + " = " +thread.getPostID());
+        return result.stream().map(row -> new DiscussionPost(Integer.parseInt(row.get("PostID")), null, null, null)).collect(Collectors.toList());
+
+    }
+
+    public Collection<Comment> getComments(DiscussionPost discussionPost){
+        Collection<String> attributes = new ArrayList<String>();
+        attributes.add("PostID");
+        Collection<Map<String, String>> result = select(attributes, TABLE_COMMENT, "WHERE " + POST_ID + " = " +discussionPost.getPostID());
+        return result.stream().map(row -> new Comment(Integer.parseInt(row.get("PostID")), null, null)).collect(Collectors.toList());
 
     }
 
