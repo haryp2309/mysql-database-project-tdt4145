@@ -12,12 +12,12 @@ public class DiscussionPost extends Post {
         super(postID, content, author);
     }
 
-    public Collection<Comment> getComments() {
-        return db.getComments(this);
+    public void postComment(String content, User author) {
+        db.postComment(content, author, getPostedTime(), this);
     }
 
-    public void postDiscussionPost(String content, User author, Thread thread) {
-        db.postDiscussionPost(content, author, getPostedTime(), thread);
+    public Collection<Comment> getComments() {
+        return db.getComments(this);
     }
 
     @Override
