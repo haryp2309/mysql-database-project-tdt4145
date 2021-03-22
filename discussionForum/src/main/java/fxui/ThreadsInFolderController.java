@@ -4,6 +4,9 @@ import discussionForum.Thread;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TreeItem;
+
+import java.util.Collection;
 
 public class ThreadsInFolderController extends AbstractController {
     @FXML
@@ -11,12 +14,18 @@ public class ThreadsInFolderController extends AbstractController {
 
     @FXML Button back;
 
+    @FXML Button makeThreadButton;
+
     @Override
     protected void onSceneSwitch() {
         super.onSceneSwitch();
         threadListView.getItems().addAll(getForum().getCurrentFolder().getThreads());
+        Collection<Thread> threads = threadListView.getItems();
         back.setOnAction(event -> {
             switchScene(AvailableSceneName.COURSE_HOME);
+        });
+        makeThreadButton.setOnAction(event -> {
+            switchScene(AvailableSceneName.MAKE_THREAD);
         });
     }
 
@@ -27,5 +36,6 @@ public class ThreadsInFolderController extends AbstractController {
             getForum().setCurrentThread(thread);
             switchScene(AvailableSceneName.THREAD_VIEW);
         }
+
     }
 }

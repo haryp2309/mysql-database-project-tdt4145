@@ -14,6 +14,5 @@
       <Button fx:id="searchButton" layoutX="450.0" layoutY="31.0" mnemonicParsing="false" text="Search Threads" />
       <Button fx:id="backButton" layoutX="62.0" layoutY="352.0" mnemonicParsing="false" text="Back" />
       <Button fx:id="threadsButton" layoutX="457.0" layoutY="352.0" mnemonicParsing="false" text="Show Threads" />
-      <Button fx:id="makeThreadButton" layoutX="350.0" layoutY="352.0" mnemonicParsing="false" text="Post a thread" />
    </children>
 </AnchorPane>

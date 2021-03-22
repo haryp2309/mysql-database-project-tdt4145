@@ -213,7 +213,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     private Collection<Map<String, String>> customSelect(String query, Collection<String> attributes) {
-
         System.out.println(query);
         Collection<Map<String, String>> result = new ArrayList<>();
         try {
