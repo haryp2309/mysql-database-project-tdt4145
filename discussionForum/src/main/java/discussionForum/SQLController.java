@@ -195,13 +195,13 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query1 += " ON ";
         query1 += TABLE_USER + "." + USER_ID;
         query1 += " = ";
-        query1 += TABLE_POST + "." + USER_ID;
+        query1 += TABLE_POST + "." + POST_AUTHOR_ID;
         query1 += " GROUP BY ";
         query1 += USER_ID;
         query1 += " ) AS PostedUser";
 
         String query2 = "(SELECT ";
-        query2 += "UserID, COUNT(ViewedTime) AS NoOfPostViewed";
+        query2 += TABLE_USER+".UserID, COUNT(ViewedTime) AS NoOfPostViewed";
         query2 += " FROM ";
         query2 += TABLE_USER;
         query2 += " LEFT OUTER JOIN ";
@@ -218,7 +218,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query += "FirstName, LastName, NoOfPostCreated, NoOfPostViewed";
         query += " FROM ";
         query += query1;
-        query += " FULL OUTER JOIN ";
+        query += " INNER JOIN ";
         query += query2;
         query += " ON ";
         query += "PostedUser.UserID = ViewedUser.UserID ";
@@ -527,18 +527,19 @@ public class SQLController extends MySQLConn implements DatabaseController {
         /*// Hary sin personlige test kode...
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         User user = User.signIn("a@a", "a");
-        Course course = db.coursesToUser(user).iterator().next();
+        //Course course = db.coursesToUser(user).iterator().next();
         //Thread thread = db.search("ER", course).iterator().next();
         //DiscussionPost discussionPost = db.getDiscussionPosts(thread).iterator().next();
         //System.out.println(db.getComments(discussionPost));
-        Folder folder = course.getFolders().stream()
+        *//*Folder folder = course.getFolders().stream()
                 .filter(randomFolder -> randomFolder.getFolderID() == 1)
                 .findFirst()
                 .get().getSubfolders().stream()
                 .filter(randomFolder -> randomFolder.getFolderID() == 2)
                 .findFirst()
-                .get();
-        System.out.println(folder.getThreads());*/
+                .get();*//*
+        //System.out.println(folder.getThreads());
+        System.out.println(db.getStatistics(user));*/
 
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
         //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
