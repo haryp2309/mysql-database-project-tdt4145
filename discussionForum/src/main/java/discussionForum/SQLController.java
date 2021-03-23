@@ -331,8 +331,33 @@ public class SQLController extends MySQLConn implements DatabaseController {
         Collection<String> attributes = new ArrayList<String>();
         attributes.add("PostID");
         attributes.add("Title");
-        Collection<Map<String, String>> result = select(attributes, TABLE_THREAD, "WHERE " + FOLDER_ID + " = " + folder.getFolderID());
-        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), null, null)).collect(Collectors.toList());
+        attributes.add("Content");
+        attributes.add("UserID");
+        attributes.add("FirstName");
+        attributes.add("LastName");
+        attributes.add("Email");
+        String additional = "NATURAL JOIN "
+                + TABLE_THREAD
+                + " INNER JOIN "
+                + TABLE_USER
+                + " ON UserID = AuthorID "
+                + " WHERE "
+                + FOLDER_ID
+                + " = "
+                + folder.getFolderID();
+        Collection<Map<String, String>> result = select(attributes, TABLE_POST, additional);
+        return result.stream().map(row -> {
+            int postId = Integer.parseInt(row.get("PostID"));
+            String title = row.get("Title");
+            String content = row.get("Content");
+
+            int userId = Integer.parseInt(row.get("UserID"));
+            String firstName = row.get("FirstName");
+            String lastName = row.get("LastName");
+            String email = row.get("Email");
+            User author = new User(userId, firstName, lastName, email);
+            return new Thread(postId, title, content, author);
+        }).collect(Collectors.toList());
 
     }
 
@@ -478,12 +503,23 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     public static void main(String[] args) {
         SQLController db = new SQLController();
+
+        /*// Hary sin personlige test kode...
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         User user = User.signIn("a@a", "a");
         Course course = db.coursesToUser(user).iterator().next();
-        Thread thread = db.search("ER", course).iterator().next();
-        DiscussionPost discussionPost = db.getDiscussionPosts(thread).iterator().next();
-        System.out.println(db.getComments(discussionPost));
+        //Thread thread = db.search("ER", course).iterator().next();
+        //DiscussionPost discussionPost = db.getDiscussionPosts(thread).iterator().next();
+        //System.out.println(db.getComments(discussionPost));
+        Folder folder = course.getFolders().stream()
+                .filter(randomFolder -> randomFolder.getFolderID() == 1)
+                .findFirst()
+                .get().getSubfolders().stream()
+                .filter(randomFolder -> randomFolder.getFolderID() == 2)
+                .findFirst()
+                .get();
+        System.out.println(folder.getThreads());*/
+
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
         //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
         //DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());

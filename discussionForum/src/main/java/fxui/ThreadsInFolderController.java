@@ -20,7 +20,6 @@ public class ThreadsInFolderController extends AbstractController {
     protected void onSceneSwitch() {
         super.onSceneSwitch();
         threadListView.getItems().addAll(getForum().getCurrentFolder().getThreads());
-        Collection<Thread> threads = threadListView.getItems();
         back.setOnAction(event -> {
             switchScene(AvailableSceneName.COURSE_HOME);
         });
