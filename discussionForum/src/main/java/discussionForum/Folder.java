@@ -52,8 +52,8 @@ public class Folder {
         return subfolders;
     }
 
-    public void postThread(String title, String content, User author) {
-        db.postThread(title, content, author, LocalDateTime.now(), this);
+    public void postThread(String title, String content, User author, Collection<Tag> tags) {
+        db.postThread(title, content, author, LocalDateTime.now(), this, tags);
     }
 
     @Override

@@ -22,6 +22,9 @@ public class ThreadViewController extends AbstractController {
     @FXML
     Button back;
 
+    @FXML
+    Label tags;
+
     @Override
     protected void onSceneSwitch() {
         super.onSceneSwitch();
@@ -36,6 +39,11 @@ public class ThreadViewController extends AbstractController {
             switchScene(AvailableSceneName.MAKE_DISCUSSION_POST);
         });
         discussionPostListView.getItems().addAll(currentThread.getDiscussionPosts());
+        tags.setText("Tags: "+currentThread.getTags().stream()
+                .map(tag -> "#"+tag.toString())
+                .reduce((tag1, tag2)-> tag1+", "+tag2)
+                .orElse("None")
+        );
     }
 
     @FXML

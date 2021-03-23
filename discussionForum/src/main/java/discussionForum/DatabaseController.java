@@ -13,13 +13,15 @@ public interface DatabaseController {
 
     User signIn(String email, String password);
 
-    void postThread(String title, String content, User author, LocalDateTime postedTime, Folder folder);
+    void postThread(String title, String content, User author, LocalDateTime postedTime, Folder folder, Collection<Tag> tags);
 
     void postDiscussionPost(String content, User author, LocalDateTime postedTime, Thread thread);
 
     void postComment(String content, User author, LocalDateTime postedTime, DiscussionPost discussionPostID);
 
-    void tag(Thread thread, Tag tag);
+    public Collection<Tag> getTags();
+
+    public Collection<Tag> getTags(Thread thread);
 
     void likePost(User user, Post post, LocalDateTime postedTime);
 

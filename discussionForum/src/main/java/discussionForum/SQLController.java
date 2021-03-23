@@ -26,6 +26,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String TABLE_ROOT_FOLDER = "rootfolder";
     public static final String TABLE_SUB_FOLDER = "subfolder";
     public static final String TABLE_ROOTFOLDER = "RootFolder";
+    public static final String TABLE_TAG = "Tag";
 
     public static final String USER_ID = "UserID";
     public static final String USER_FIRST_NAME = "FirstName";
@@ -53,7 +54,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String POST_COMMENT_POST_ID = "PostID";
     public static final String POST_COMMENT_DISCUSSION_ID = "DiscussionID";
 
-    public static final String TAG_TAG_ID = "TagID";
+    public static final String TAG_TAG_ID = "TagName";
 
     public static final String VIEWED_TIME = "ViewedTime";
     public static final String LIKED_TIME = "LikedTime";
@@ -311,13 +312,17 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     @Override
-    public void postThread(String title, String content, User author, LocalDateTime postedTime, Folder folder) {
+    public void postThread(String title, String content, User author, LocalDateTime postedTime, Folder folder, Collection<Tag> tags) {
         int postId = post(content, author, postedTime);
         HashMap<String, String> values = new HashMap<>();
         values.put(POST_THREAD_POST_ID, Integer.toString(postId));
         values.put(POST_THREAD_TITLE, title);
         values.put(POST_THREAD_FOLDER_ID, Integer.toString(folder.getFolderID()));
         insert(values, TABLE_THREAD);
+        tags.forEach(specifiedTag -> {
+            tag(postId, specifiedTag);
+        });
+
     }
 
     @Override
@@ -338,11 +343,11 @@ public class SQLController extends MySQLConn implements DatabaseController {
         insert(values, TABLE_COMMENT);
     }
 
-    @Override
-    public void tag(Thread thread, Tag tag) {
+
+    private void tag(int threadId, Tag tag) {
         Map<String, String> values = new HashMap<>();
         values.put(TAG_TAG_ID, tag.getValue());
-        values.put(POST_THREAD_POST_ID, Integer.toString(thread.getPostID()));
+        values.put("ThreadID", Integer.toString(threadId));
         insert(values, TABLE_TAG_ON_THREAD);
     }
 
@@ -505,6 +510,23 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 .collect(Collectors.toList());
     }
 
+    public Collection<Tag> getTags() {
+        Collection<String> attributes = new ArrayList<>();
+        attributes.add("TagName");
+        return select(attributes, TABLE_TAG, "").stream()
+                .map(row -> new Tag(row.get("TagName")))
+                .collect(Collectors.toList());
+    }
+
+    public Collection<Tag> getTags(Thread thread) {
+        Collection<String> attributes = new ArrayList<>();
+        attributes.add("TagName");
+        String additional = "WHERE ThreadID = "+thread.getPostID();
+        return select(attributes, TABLE_TAG_ON_THREAD, additional ).stream()
+                .map(row -> new Tag(row.get("TagName")))
+                .collect(Collectors.toList());
+    }
+
     private Collection<Folder> getSubFolders(int parentID) {
         Collection<String> attributes = new ArrayList<>();
         attributes.add("FolderID");
@@ -524,22 +546,22 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static void main(String[] args) {
         SQLController db = new SQLController();
 
-        /*// Hary sin personlige test kode...
+        // Hary sin personlige test kode...
         //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
         User user = User.signIn("a@a", "a");
-        //Course course = db.coursesToUser(user).iterator().next();
+        Course course = db.coursesToUser(user).iterator().next();
         //Thread thread = db.search("ER", course).iterator().next();
         //DiscussionPost discussionPost = db.getDiscussionPosts(thread).iterator().next();
         //System.out.println(db.getComments(discussionPost));
-        *//*Folder folder = course.getFolders().stream()
+        /*Folder folder = course.getFolders().stream()
                 .filter(randomFolder -> randomFolder.getFolderID() == 1)
                 .findFirst()
                 .get().getSubfolders().stream()
                 .filter(randomFolder -> randomFolder.getFolderID() == 2)
                 .findFirst()
-                .get();*//*
+                .get();*/
         //System.out.println(folder.getThreads());
-        System.out.println(db.getStatistics(user));*/
+
 
         //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
         //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
