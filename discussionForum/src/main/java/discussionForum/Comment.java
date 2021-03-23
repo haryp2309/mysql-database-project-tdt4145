@@ -9,11 +9,6 @@ public class Comment extends Post {
         super(postID, content, author);
     }
 
-
-    public void postComment(String content, User author, DiscussionPost discussionPost) {
-        db.postComment(content, author, getPostedTime(), discussionPost);
-    }
-
     public String toString() {
         return getContent();
     }

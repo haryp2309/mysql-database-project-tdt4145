@@ -525,6 +525,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
         //DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
         //db.postComment("grov content", user, LocalDateTime.now(), discussion);
         //System.out.println(db.isEmailUsed("ssdadss@dasddjacskkljl.com"));
+        //User user = User.signIn("kake@kake.com","123eple321");
+        //System.out.println(db.getStatistics(user));
+
     }
 }
 

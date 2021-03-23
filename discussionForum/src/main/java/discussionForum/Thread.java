@@ -19,6 +19,10 @@ public class Thread extends Post {
         return db.getDiscussionPosts(this);
     }
 
+    public void postDiscussionPost(String content, User author) {
+        db.postDiscussionPost(content, author, getPostedTime(), this);
+    }
+
     public void addTag(Tag tag) {
         if (!this.tags.contains(tag)) {
             this.tags.add(tag);
