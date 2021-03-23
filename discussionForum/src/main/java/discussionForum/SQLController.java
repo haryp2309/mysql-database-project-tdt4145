@@ -188,7 +188,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     @Override
     public Collection<Map<String, String>> getStatistics(User user) {
         String query1 = "(SELECT ";
-        query1 += "UserID, firstName, lastName, COUNT(PostedTime) AS NoOfPostCreated";
+        query1 += "UserID, Email, COUNT(PostedTime) AS NoOfPostCreated";
         query1 += " FROM ";
         query1 += TABLE_USER;
         query1 += " LEFT OUTER JOIN ";
@@ -216,7 +216,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query2 += " ) AS ViewedUser";
 
         String query = "SELECT ";
-        query += "FirstName, LastName, NoOfPostCreated, NoOfPostViewed";
+        query += "Email, NoOfPostCreated, NoOfPostViewed";
         query += " FROM ";
         query += query1;
         query += " INNER JOIN ";
@@ -226,7 +226,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query += "ORDER BY NoOfPostViewed DESC";
 
 
-        Collection<String> attributes = new ArrayList(Arrays.asList("FirstName", "LastName", "NoOfPostCreated", "NoOfPostViewed"));
+        Collection<String> attributes = new ArrayList(Arrays.asList("Email", "NoOfPostCreated", "NoOfPostViewed"));
 
         return customSelect(query, attributes);
 

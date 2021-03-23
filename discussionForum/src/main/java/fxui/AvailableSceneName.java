@@ -10,7 +10,8 @@ public enum AvailableSceneName {
     DISCUSSION_POST_VIEW("DiscussionPost.fxml"),
     THREADS_IN_FOLDER("ThreadsInFolder.fxml"),
     MAKE_DISCUSSION_POST("MakeDiscussionPost.fxml"),
-    MAKE_COMMENT("MakeComment.fxml");
+    MAKE_COMMENT("MakeComment.fxml"),
+    STATISTICS("Statistics.fxml");
 
     private final String value;
 

@@ -12,12 +12,19 @@ public class UserHomeController extends AbstractController {
     @FXML
     ListView<Course> courseListView = new ListView<>();
 
+    @FXML
+    Button statistics;
+
 
 
     @Override
     protected void onSceneSwitch() {
         Collection<Course> courses = getForum().getCurrentUser().getCourses();
         courseListView.getItems().addAll(courses);
+
+        statistics.setOnAction(event -> {
+            switchScene(AvailableSceneName.STATISTICS);
+        });
     }
 
     @FXML

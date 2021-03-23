@@ -40,7 +40,6 @@ public abstract class Post {
         return content;
     }
 
-    public void setContent(String content){this.content = content;}
 
 
 
