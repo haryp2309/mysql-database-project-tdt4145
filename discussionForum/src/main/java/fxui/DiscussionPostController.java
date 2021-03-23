@@ -2,7 +2,6 @@ package fxui;
 
 import discussionForum.Comment;
 import discussionForum.DiscussionPost;
-import discussionForum.Thread;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +17,9 @@ public class DiscussionPostController extends AbstractController {
     Button back;
 
     @FXML
+    Button postComment;
+
+    @FXML
     ListView<Comment> commentListView;
 
     @FXML Label originalThread;
@@ -31,6 +33,9 @@ public class DiscussionPostController extends AbstractController {
         back.setOnAction(event -> {
             getForum().setCurrentDiscussionPost(null);
             switchScene(AvailableSceneName.THREAD_VIEW);
+        });
+        postComment.setOnAction(event -> {
+            switchScene(AvailableSceneName.MAKE_COMMENT);
         });
         commentListView.getItems().addAll(currentDiscussionPost.getComments());
         originalThread.setText("From thread: "+getForum().getCurrentThread().getTitle());
