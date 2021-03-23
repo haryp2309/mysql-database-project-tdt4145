@@ -1,5 +1,6 @@
 package fxui;
 
+import discussionForum.Course;
 import discussionForum.Folder;
 import discussionForum.Thread;
 import javafx.fxml.FXML;
@@ -23,7 +24,6 @@ public class CourseHomeController extends AbstractController {
 
     @FXML Button threadsButton;
 
-    @FXML Button makeThreadButton;
 
     private TreeItem<Folder> addSubFolders(Folder folder) {
         TreeItem<Folder> treeItem = new TreeItem<>(folder);
@@ -57,8 +57,6 @@ public class CourseHomeController extends AbstractController {
             getForum().setCurrentFolder(folder);
             switchScene(AvailableSceneName.THREADS_IN_FOLDER);
         });
-        makeThreadButton.setOnAction(event -> {
-            switchScene(AvailableSceneName.MAKE_THREAD);
-        });
     }
+
 }

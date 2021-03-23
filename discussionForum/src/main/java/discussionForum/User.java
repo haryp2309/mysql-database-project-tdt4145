@@ -53,5 +53,8 @@ public class User {
         return userID;
     }
 
+    public Collection<Map<String, String>> getStatistics(){
+        return db.getStatistics(this);
+    }
 
 }
