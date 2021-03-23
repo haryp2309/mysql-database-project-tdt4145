@@ -13,8 +13,9 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Label fx:id="content" alignment="TOP_LEFT" layoutX="46.0" layoutY="95.0" prefHeight="219.0" prefWidth="184.0" text="Label" />
+      <Label fx:id="content" alignment="TOP_LEFT" layoutX="46.0" layoutY="95.0" prefHeight="249.0" prefWidth="184.0" text="Label" />
       <Button fx:id="back" layoutX="46.0" layoutY="352.0" mnemonicParsing="false" text="Back" />
-      <ListView fx:id="discussionPostListView" layoutX="257.0" layoutY="92.0" onMouseClicked="#onClicked" prefHeight="265.0" prefWidth="307.0" />
+      <ListView fx:id="discussionPostListView" layoutX="257.0" layoutY="92.0" onMouseClicked="#onClicked" prefHeight="249.0" prefWidth="307.0" />
+      <Button fx:id="createDiscussionPost" layoutX="428.0" layoutY="352.0" mnemonicParsing="false" text="Create Discussion Post" />
    </children>
 </AnchorPane>

@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 
 import java.time.LocalDateTime;
 
-public class MakeThreadController extends AbstractController{
+public class MakeDiscussionPostController extends AbstractController{
 
     @FXML
     TextField content;
@@ -20,22 +20,19 @@ public class MakeThreadController extends AbstractController{
     @FXML
     Button back;
 
-    @FXML
-    TextField title;
 
 
     protected void onSceneSwitch() {
         super.onSceneSwitch();
         back.setOnAction(event -> {
-            switchScene(AvailableSceneName.THREADS_IN_FOLDER);
+            switchScene(AvailableSceneName.THREAD_VIEW);
         });
         post.setOnAction(event -> {
-            String content1 = content.getText();
-            String title1 = title.getText();
-            Folder folder = getForum().getCurrentFolder();
+            String content = this.content.getText();
+            Thread thread = getForum().getCurrentThread();
             User user = getForum().getCurrentUser();
-            folder.postThread(title1, content1, user);
-            switchScene(AvailableSceneName.THREADS_IN_FOLDER);
+            thread.postDiscussionPost(content, user);
+            switchScene(AvailableSceneName.THREAD_VIEW);
         });
     }
 

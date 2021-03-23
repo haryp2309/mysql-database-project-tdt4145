@@ -2,6 +2,7 @@ package discussionForum;
 
 import static discussionForum.DatabaseController.db;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,7 +21,7 @@ public class Thread extends Post {
     }
 
     public void postDiscussionPost(String content, User author) {
-        db.postDiscussionPost(content, author, getPostedTime(), this);
+        db.postDiscussionPost(content, author, LocalDateTime.now(), this);
     }
 
     public void addTag(Tag tag) {

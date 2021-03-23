@@ -138,6 +138,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("PostID");
         attributes.add("Title");
         attributes.add("Content");
+        attributes.add("UserID");
+        attributes.add("FirstName");
+        attributes.add("LastName");
+        attributes.add("Email");
 
         Collection<Folder> folders = getFolders(course);
         Collection<String> folderIds = new ArrayList<>();
@@ -153,7 +157,11 @@ public class SQLController extends MySQLConn implements DatabaseController {
         if (seperatedFolderIDs == null) {
             return new ArrayList<>();
         }
-        String query = "INNER JOIN Thread USING (PostID) WHERE (";
+        String query = "NATURAL JOIN ";
+        query += TABLE_THREAD;
+        query += " INNER JOIN ";
+        query += TABLE_USER;
+        query += " ON UserID = AuthorID WHERE (";
         query += seperatedFolderIDs;
         query += ") AND PostType = \"Thread\" AND (Title LIKE \"%";
         query += searchWord;
@@ -161,7 +169,19 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query += searchWord;
         query += "%\")";
         Collection<Map<String, String>> result = select(attributes, TABLE_POST, query);
-        return result.stream().map(row -> new Thread(Integer.parseInt(row.get("PostID")), row.get("Title"), row.get("Content"), null)).collect(Collectors.toList());
+        return result.stream().map(row -> {
+            int postId = Integer.parseInt(row.get("PostID"));
+            String title = row.get("Title");
+            String content = row.get("Content");
+
+            String firstName = row.get("FirstName");
+            String lastName = row.get("LastName");
+            String email = row.get("Email");
+            int userId = Integer.parseInt(row.get("UserID"));
+            User user = new User(userId, firstName, lastName, email);
+
+            return new Thread(postId, title, content, user);
+        }).collect(Collectors.toList());
     }
 
     @Override

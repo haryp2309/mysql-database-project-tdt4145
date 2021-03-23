@@ -17,6 +17,9 @@ public class ThreadViewController extends AbstractController {
     ListView<DiscussionPost> discussionPostListView;
 
     @FXML
+    Button createDiscussionPost;
+
+    @FXML
     Button back;
 
     @Override
@@ -28,6 +31,9 @@ public class ThreadViewController extends AbstractController {
         back.setOnAction(event -> {
             getForum().setCurrentThread(null);
             switchScene(AvailableSceneName.COURSE_HOME);
+        });
+        createDiscussionPost.setOnAction(event -> {
+            switchScene(AvailableSceneName.MAKE_DISCUSSION_POST);
         });
         discussionPostListView.getItems().addAll(currentThread.getDiscussionPosts());
     }

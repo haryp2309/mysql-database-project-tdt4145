@@ -52,4 +52,5 @@ public interface DatabaseController {
     public Collection<Folder> getFolders(Course course);
 
 
+
 }
