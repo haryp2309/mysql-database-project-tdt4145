@@ -2,6 +2,8 @@ package discussionForum;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+
 import static discussionForum.DatabaseController.db;
 
 
@@ -60,6 +62,10 @@ public class Course {
 
     public Collection<Thread> search(String searchWord) {
         return db.search(searchWord, this);
+    }
+
+    public Collection<Map<String, String>> getStatistics(User user) {
+        return db.getStatistics(user, this);
     }
 
     @Override

@@ -53,8 +53,7 @@ public class User {
         return userID;
     }
 
-    public Collection<Map<String, String>> getStatistics(){
-        return db.getStatistics(this);
+    public boolean isInstructor(Course course) {
+        return db.isUserInstructor(this, course);
     }
-
 }

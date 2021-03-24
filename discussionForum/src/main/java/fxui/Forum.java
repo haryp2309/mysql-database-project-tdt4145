@@ -67,10 +67,6 @@ public class Forum {
         this.currentCourse = currentCourse;
     }
 
-    public Collection<Map<String, String>> getStatistics(User user) {
-        return db.getStatistics(user);
-    }
-
     @Override
     public String toString() {
         return "Forum{" +

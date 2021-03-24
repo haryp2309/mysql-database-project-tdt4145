@@ -134,6 +134,18 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return new User(id, firstName, lastName, email);
     }
 
+    private Collection<String> getFolderIdsInCourse(Course course) {
+        Collection<Folder> folders = getFolders(course);
+        Collection<String> folderIds = new ArrayList<>();
+        Stack<Folder> stack = new Stack<>();
+        stack.addAll(folders);
+        while (!stack.isEmpty()) {
+            Folder currentFolder = stack.pop();
+            folderIds.add(Integer.toString(currentFolder.getFolderID()));
+            stack.addAll(currentFolder.getSubfolders());
+        }
+        return folderIds;
+    }
 
     //search søker etter et søkeord blant tråder (Thread-objekter) i et bestemt kurs, i databasen.
     //Metoden søker etter ordet i både tittelen (Title) og selve teksten til tråden (Content)
@@ -149,17 +161,11 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("LastName");
         attributes.add("Email");
 
-        Collection<Folder> folders = getFolders(course);
-        Collection<String> folderIds = new ArrayList<>();
-        Stack<Folder> stack = new Stack<>();
-        stack.addAll(folders);
-        while (!stack.isEmpty()) {
-            Folder currentFolder = stack.pop();
-            folderIds.add(Integer.toString(currentFolder.getFolderID()));
-            stack.addAll(currentFolder.getSubfolders());
-        }
+        Collection<String> folderIds = getFolderIdsInCourse(course);
 
-        String seperatedFolderIDs = folderIds.stream().reduce((id1, id2) -> id1+" OR "+id2).orElse(null);
+        String seperatedFolderIDs = folderIds.stream()
+                .reduce((id1, id2) -> id1+", "+id2)
+                .orElse(null);
         if (seperatedFolderIDs == null) {
             return new ArrayList<>();
         }
@@ -167,7 +173,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query += TABLE_THREAD;
         query += " INNER JOIN ";
         query += TABLE_USER;
-        query += " ON UserID = AuthorID WHERE (";
+        query += " ON UserID = AuthorID WHERE FolderID IN (";
         query += seperatedFolderIDs;
         query += ") AND PostType = \"Thread\" AND (Title LIKE \"%";
         query += searchWord;
@@ -197,17 +203,29 @@ public class SQLController extends MySQLConn implements DatabaseController {
     //HVA RETURNERER METODEN HJELP
     //
     @Override
-    public Collection<Map<String, String>> getStatistics(User user) {
+    public Collection<Map<String, String>> getStatistics(User user, Course course) {
+        String seperatedFolderIDs = getFolderIdsInCourse(course).stream()
+                .reduce((id1, id2) -> id1+", "+id2)
+                .orElse(null);
+
         String query1 = "(SELECT ";
         query1 += "UserID, Email, COUNT(PostedTime) AS NoOfPostCreated";
         query1 += " FROM ";
-        query1 += TABLE_USER;
-        query1 += " LEFT OUTER JOIN ";
         query1 += TABLE_POST;
+        query1 += " NATURAL JOIN ";
+        query1 += TABLE_THREAD;
+        query1 += " RIGHT OUTER JOIN ";
+        query1 += TABLE_USER;
         query1 += " ON ";
         query1 += TABLE_USER + "." + USER_ID;
         query1 += " = ";
         query1 += TABLE_POST + "." + POST_AUTHOR_ID;
+        query1 += " NATURAL JOIN ";
+        query1 += TABLE_USERINCOURSE;
+        query1 += " WHERE (FolderID IN (";
+        query1 += seperatedFolderIDs;
+        query1 += ") OR FolderID IS Null) AND CourseID = ";
+        query1 += course.getCourseID();
         query1 += " GROUP BY ";
         query1 += USER_ID;
         query1 += " ) AS PostedUser";
@@ -215,13 +233,26 @@ public class SQLController extends MySQLConn implements DatabaseController {
         String query2 = "(SELECT ";
         query2 += TABLE_USER+".UserID, COUNT(ViewedTime) AS NoOfPostViewed";
         query2 += " FROM ";
-        query2 += TABLE_USER;
-        query2 += " LEFT OUTER JOIN ";
         query2 += TABLE_VIEWEDBY;
+        query2 += " NATURAL JOIN ";
+        query2 += TABLE_THREAD;
+        query2 += " RIGHT OUTER JOIN ";
+        query2 += TABLE_USER;
         query2 += " ON ";
         query2 += TABLE_USER + "." + USER_ID;
         query2 += " = ";
         query2 += TABLE_VIEWEDBY + "." + USER_ID;
+        query2 += " INNER JOIN ";
+        query2 += TABLE_USERINCOURSE;
+        query2 += " ON ";
+        query2 += TABLE_USER;
+        query2 += ".UserID = ";
+        query2 += TABLE_USERINCOURSE;
+        query2 += ".UserID";
+        query2 += " WHERE (FolderID IN (";
+        query2 += seperatedFolderIDs;
+        query2 += ") OR FolderID IS Null) AND CourseID = ";
+        query2 += course.getCourseID();
         query2 += " GROUP BY ";
         query2 += USER_ID;
         query2 += " ) AS ViewedUser";
@@ -306,11 +337,15 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }
     }
 
+    @Override
     public boolean isUserInstructor(User user, Course course){
         Collection<String> attributes = new ArrayList<String>();
         attributes.add("IsInstructor");
-        Collection<Map<String, String>> result = select(attributes, TABLE_USERINCOURSE, "WHERE("+USER_ID+" = "+user.getUserID()+"AND"+COURSE_ID+" = "+course.getCourseID()+")");
-        return result.stream().map(row -> Boolean.parseBoolean(row.get("IsInstructor"))).findFirst().get();
+        Collection<Map<String, String>> result = select(attributes, TABLE_USERINCOURSE, "WHERE("+USER_ID+" = "+user.getUserID()+" AND "+COURSE_ID+" = "+course.getCourseID()+")");
+        return result.stream()
+                .map(row -> Integer.parseInt(row.get("IsInstructor")) == 1)
+                .findFirst()
+                .orElse(false);
     }
 
     private int post(String content, User author, LocalDateTime postedTime) {
@@ -396,14 +431,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }).collect(Collectors.toList());
 
     }
-
-    /*public Collection<DiscussionPost> getDiscussionPosts(Thread thread){
-        Collection<String> attributes = new ArrayList<String>();
-        attributes.add("PostID");
-        Collection<Map<String, String>> result = select(attributes, TABLE_DISCUSSION, "WHERE " + POST_ID + " = " +thread.getPostID());
-        return result.stream().map(row -> new DiscussionPost(Integer.parseInt(row.get("PostID")), null, null, null)).collect(Collectors.toList());
-
-    }*/
 
     public Collection<Comment> getComments(DiscussionPost discussionPost){
         Collection<String> attributes = new ArrayList<String>();
