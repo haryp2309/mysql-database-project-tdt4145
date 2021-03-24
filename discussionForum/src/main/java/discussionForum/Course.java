@@ -27,28 +27,21 @@ public class Course {
         return courseName;
     }
 
-
     public String getTerm() {
         return term;
     }
-
 
     public int getTermYear() {
         return termYear;
     }
 
-
     public boolean isAnonymousAllowance() {
         return anonymousAllowance;
     }
 
-
-
     public Collection<Folder> getFolders() {
         return db.getFolders(this);
     }
-
-
 
     public Collection<Thread> search(String searchWord) {
         return db.search(searchWord, this);
