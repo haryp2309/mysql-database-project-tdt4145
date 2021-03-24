@@ -82,7 +82,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
             query += table;
             query += " ";
             query += additionalSQLStatements;
-        Collection<Map<String, String>> result = new ArrayList<>();
         return customSelect(query, attributes);
 
     }
