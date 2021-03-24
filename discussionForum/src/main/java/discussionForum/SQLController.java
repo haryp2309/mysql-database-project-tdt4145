@@ -501,38 +501,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 })
                 .collect(Collectors.toList());
     }
-
-
-
-    public static void main(String[] args) {
-        SQLController db = new SQLController();
-
-        // Hary sin personlige test kode...
-        //User user = db.createUser("Olav", "Nordmann", "ssdadss@dasddjacskkljl.com", "dsajlksjadlaksj");
-        User user = User.signIn("a@a", "a");
-        Course course = db.coursesToUser(user).iterator().next();
-        //Thread thread = db.search("ER", course).iterator().next();
-        //DiscussionPost discussionPost = db.getDiscussionPosts(thread).iterator().next();
-        //System.out.println(db.getComments(discussionPost));
-        /*Folder folder = course.getFolders().stream()
-                .filter(randomFolder -> randomFolder.getFolderID() == 1)
-                .findFirst()
-                .get().getSubfolders().stream()
-                .filter(randomFolder -> randomFolder.getFolderID() == 2)
-                .findFirst()
-                .get();*/
-        //System.out.println(folder.getThreads());
-
-
-        //db.postThread("Tittel", "grov content", user, LocalDateTime.now(), 2);
-        //Thread thread = new Thread(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
-        //DiscussionPost discussion = new DiscussionPost(1, "sjd", 3, LocalDateTime.now(), true, new ArrayList<>());
-        //db.postComment("grov content", user, LocalDateTime.now(), discussion);
-        //System.out.println(db.isEmailUsed("ssdadss@dasddjacskkljl.com"));
-        //User user = User.signIn("kake@kake.com","123eple321");
-        //System.out.println(db.getStatistics(user));
-
-    }
 }
 
 
