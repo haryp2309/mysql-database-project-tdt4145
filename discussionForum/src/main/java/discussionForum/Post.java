@@ -33,7 +33,7 @@ public abstract class Post {
         return postedTime;
     }
 
-    public static void main(String[] args) {
-
+    public void readPost(User user) {
+        db.viewPost(user, this, LocalDateTime.now());
     }
 }

@@ -485,11 +485,15 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public void viewPost(User user, Post post, LocalDateTime viewedTimed) {
-        Map<String, String> values = new HashMap<>();
-        values.put(USER_ID, Integer.toString(user.getUserID()));
-        values.put(POST_ID, Integer.toString(post.getPostID()));
-        values.put(VIEWED_TIME, localDateTimeConverter(viewedTimed));
-        insert(values, TABLE_VIEWEDBY);
+        String additional = "WHERE UserID="+user.getUserID()+" AND PostID="+post.getPostID();
+        boolean alreadyExist = select(null, TABLE_VIEWEDBY,additional).size() > 0;
+        if (!alreadyExist){
+            Map<String, String> values = new HashMap<>();
+            values.put(USER_ID, Integer.toString(user.getUserID()));
+            values.put(POST_ID, Integer.toString(post.getPostID()));
+            values.put(VIEWED_TIME, localDateTimeConverter(viewedTimed));
+            insert(values, TABLE_VIEWEDBY);
+        }
     }
 
     @Override

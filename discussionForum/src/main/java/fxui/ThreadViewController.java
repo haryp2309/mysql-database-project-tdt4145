@@ -44,6 +44,7 @@ public class ThreadViewController extends AbstractController {
                 .reduce((tag1, tag2)-> tag1+", "+tag2)
                 .orElse("None")
         );
+        getForum().getCurrentThread().readPost(getForum().getCurrentUser());
     }
 
     @FXML

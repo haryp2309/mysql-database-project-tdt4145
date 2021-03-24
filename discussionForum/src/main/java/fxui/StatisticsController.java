@@ -25,7 +25,7 @@ public class StatisticsController extends AbstractController{
     protected void onSceneSwitch() {
         super.onSceneSwitch();
         back.setOnAction(event -> {
-            switchScene(AvailableSceneName.USER_HOME);
+            switchScene(AvailableSceneName.COURSE_HOME);
         });
         User currentUser = getForum().getCurrentUser();
         Collection<Map<String, String>> stats = getForum().getCurrentCourse().getStatistics(currentUser);
