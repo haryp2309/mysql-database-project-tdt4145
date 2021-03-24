@@ -42,8 +42,9 @@ public interface DatabaseController {
 
     Collection<Thread> search(String searchWord, Course course);
 
-    Collection<Map<String, String>> getStatistics(User user);
+    Collection<Map<String, String>> getStatistics(User user, Course course);
 
+    public boolean isUserInstructor(User user, Course course);
 
 
 }

@@ -1,6 +1,7 @@
 package fxui;
 
 import discussionForum.Folder;
+import discussionForum.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -26,13 +27,14 @@ public class StatisticsController extends AbstractController{
         back.setOnAction(event -> {
             switchScene(AvailableSceneName.USER_HOME);
         });
-        Collection<Map<String, String>> stats = getForum().getCurrentUser().getStatistics();
+        User currentUser = getForum().getCurrentUser();
+        Collection<Map<String, String>> stats = getForum().getCurrentCourse().getStatistics(currentUser);
 
         Collection<String> newStats = stats.stream().map(row -> {
             String email = row.get("Email");
             String postCount = row.get("NoOfPostCreated");
             String postViewed = row.get("NoOfPostViewed");
-            return email + " has " + postCount + " posts created and " + postViewed + " posts viewed.";
+            return email + " has " + postCount + " threads created and " + postViewed + " posts viewed.";
         }).collect(Collectors.toList());
 
         for(String row : newStats){

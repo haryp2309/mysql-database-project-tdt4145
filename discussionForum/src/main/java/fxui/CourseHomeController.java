@@ -24,6 +24,8 @@ public class CourseHomeController extends AbstractController {
 
     @FXML Button threadsButton;
 
+    @FXML
+    Button statistics;
 
     private TreeItem<Folder> addSubFolders(Folder folder) {
         TreeItem<Folder> treeItem = new TreeItem<>(folder);
@@ -57,6 +59,13 @@ public class CourseHomeController extends AbstractController {
             getForum().setCurrentFolder(folder);
             switchScene(AvailableSceneName.THREADS_IN_FOLDER);
         });
+        if (getForum().getCurrentUser().isInstructor(getForum().getCurrentCourse())) {
+            statistics.setOnAction(event -> {
+                switchScene(AvailableSceneName.STATISTICS);
+            });
+        } else {
+            statistics.setDisable(true);
+        }
     }
 
 }

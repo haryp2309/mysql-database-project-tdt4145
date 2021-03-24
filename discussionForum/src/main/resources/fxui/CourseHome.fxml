@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxui.CourseHomeController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxui.CourseHomeController">
    <children>
       <Label layoutX="62.0" layoutY="35.0" text="Folders" />
       <TreeView fx:id="threadTreeView" layoutX="62.0" layoutY="61.0" prefHeight="278.0" prefWidth="485.0" />
@@ -14,5 +14,6 @@
       <Button fx:id="searchButton" layoutX="450.0" layoutY="31.0" mnemonicParsing="false" text="Search Threads" />
       <Button fx:id="backButton" layoutX="62.0" layoutY="352.0" mnemonicParsing="false" text="Back" />
       <Button fx:id="threadsButton" layoutX="457.0" layoutY="352.0" mnemonicParsing="false" text="Show Threads" />
+      <Button fx:id="statistics" layoutX="387.0" layoutY="352.0" mnemonicParsing="false" text="Statistics" />
    </children>
 </AnchorPane>
