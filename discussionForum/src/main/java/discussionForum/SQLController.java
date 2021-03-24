@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class SQLController extends MySQLConn implements DatabaseController {
 
+    //Navn til tabellene i databasen i form av konstanter
     public static final String TABLE_USER = "User";
     public static final String TABLE_POST = "Post";
     public static final String TABLE_THREAD = "Thread";
@@ -120,6 +121,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return null;
     }
 
+    //createUser brukes til å opprette en bruker som lagres i databasen. 
+    //Metoden returnerer brukeren (User-objekt) som ble opprettet.
     @Override
     public User createUser(String firstName, String lastName, String email, String password) {
         HashMap<String, String> values = new HashMap<>();
@@ -132,7 +135,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
 
-
+    //search søker etter et søkeord blant tråder (Thread-objekter) i et bestemt kurs, i databasen.
+    //Metoden søker etter ordet i både tittelen (Title) og selve teksten til tråden (Content)
+    //Metoden returnerer en liste med tråder som inneholder søkeordet.
     @Override
     public Collection<Thread> search(String searchWord, Course course) {
         Collection<String> attributes = new ArrayList<String>();
@@ -185,6 +190,12 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }).collect(Collectors.toList());
     }
 
+    //Metoden getStatistics finner frem statistikk om alle brukere.
+    //Statistikken består av tall på antall poster en bruker har lagt ut,
+    //og tall på antall poster en bruker har sett.
+    //
+    //HVA RETURNERER METODEN HJELP
+    //
     @Override
     public Collection<Map<String, String>> getStatistics(User user) {
         String query1 = "(SELECT ";
