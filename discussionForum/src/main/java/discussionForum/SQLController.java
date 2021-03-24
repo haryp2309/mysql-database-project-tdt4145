@@ -84,19 +84,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return null;
     }
 
-    //createUser brukes til å opprette en bruker som lagres i databasen. 
-    //Metoden returnerer brukeren (User-objekt) som ble opprettet.
-    @Override
-    public User createUser(String firstName, String lastName, String email, String password) {
-        HashMap<String, String> values = new HashMap<>();
-        values.put("FirstName", firstName);
-        values.put("LastName", lastName);
-        values.put("Email", email);
-        values.put("Password", password);
-        int id = Integer.parseInt(Objects.requireNonNull(this.insert(values, TABLE_USER)));
-        return new User(id, firstName, lastName, email);
-    }
-
     private Collection<String> getFolderIdsInCourse(Course course) {
         Collection<Folder> folders = getFolders(course);
         Collection<String> folderIds = new ArrayList<>();

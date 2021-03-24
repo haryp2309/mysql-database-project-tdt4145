@@ -29,10 +29,6 @@ public class User {
         }
     }
 
-    public static User createUser(String firstName, String lastName, String email, String password) {
-        return db.createUser(firstName, lastName, email, password);
-    }
-
     public String getEmail() {
         return email;
     }

@@ -8,8 +8,6 @@ public interface DatabaseController {
 
     DatabaseController db = new SQLController();
 
-    User createUser(String firstName, String lastName, String email, String password);
-
     User signIn(String email, String password);
 
     Collection<Course> coursesToUser(User user);
