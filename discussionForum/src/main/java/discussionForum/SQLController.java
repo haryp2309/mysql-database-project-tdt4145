@@ -152,7 +152,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     //Metoden returnerer en liste med tråder som inneholder søkeordet.
     @Override
     public Collection<Thread> search(String searchWord, Course course) {
-        Collection<String> attributes = new ArrayList<String>();
+        Collection<String> attributes = new ArrayList<>();
         attributes.add("PostID");
         attributes.add("Title");
         attributes.add("Content");
@@ -339,7 +339,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public boolean isUserInstructor(User user, Course course){
-        Collection<String> attributes = new ArrayList<String>();
+        Collection<String> attributes = new ArrayList<>();
         attributes.add("IsInstructor");
         Collection<Map<String, String>> result = select(attributes, TABLE_USERINCOURSE, "WHERE("+USER_ID+" = "+user.getUserID()+" AND "+COURSE_ID+" = "+course.getCourseID()+")");
         return result.stream()
@@ -399,7 +399,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     public Collection<Thread> getThreads(Folder folder) {
 
-        Collection<String> attributes = new ArrayList<String>();
+        Collection<String> attributes = new ArrayList<>();
         attributes.add("PostID");
         attributes.add("Title");
         attributes.add("Content");
@@ -433,7 +433,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     public Collection<Comment> getComments(DiscussionPost discussionPost){
-        Collection<String> attributes = new ArrayList<String>();
+        Collection<String> attributes = new ArrayList<>();
         attributes.add("PostID");
         attributes.add("Content");
         attributes.add("AuthorID");
@@ -470,7 +470,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         Collection<Map<String, String>> courseRows = select(courseAttributes, TABLE_COURSE, "NATURAL JOIN userInCourse WHERE " + user.getUserID() + " = UserID");
         return courseRows
                 .stream()
-                .map(row -> new Course(Integer.parseInt(row.get("CourseID")), row.get("Name"), row.get("Term"), LocalDate.parse(row.get("TermYear")).getYear(), Boolean.parseBoolean(row.get("AnonymousAllowance")), new ArrayList<>()))
+                .map(row -> new Course(Integer.parseInt(row.get("CourseID")), row.get("Name"), row.get("Term"), LocalDate.parse(row.get("TermYear")).getYear(), Boolean.parseBoolean(row.get("AnonymousAllowance"))))
                 .collect(Collectors.toList());
     }
 
@@ -512,7 +512,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return result.stream()
                 .map(row -> {
                     Collection<Folder> subFolders = getSubFolders(Integer.parseInt(row.get("FolderID")));
-                    return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders, null);
+                    return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders);
                 })
                 .collect(Collectors.toList());
     }
@@ -574,7 +574,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return result.stream()
                 .map(row -> {
                     Collection<Folder> subFolders = getSubFolders(Integer.parseInt(row.get("FolderID")));
-                    return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders, null);
+                    return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders);
                 })
                 .collect(Collectors.toList());
     }

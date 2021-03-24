@@ -1,6 +1,5 @@
 package discussionForum;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -13,14 +12,12 @@ public class Course {
     private String term;
     private int termYear;
     private boolean anonymousAllowance;
-    private Collection<Folder> folders = new ArrayList<Folder>();
 
-    public Course(int courseID, String courseName, String term, int termYear, boolean anonymousAllowance, Collection<Folder> folders) {
+    public Course(int courseID, String courseName, String term, int termYear, boolean anonymousAllowance) {
         this.courseName = courseName;
         this.term = term;
         this.termYear = termYear;
         this.anonymousAllowance = anonymousAllowance;
-        this.folders = folders;
         this.courseID = courseID;
     }
 
@@ -32,33 +29,21 @@ public class Course {
         return courseName;
     }
 
-
     public String getTerm() {
         return term;
     }
 
-
     public int getTermYear() {
         return termYear;
-    }
-
-
-    public boolean isAnonymousAllowance() {
-        return anonymousAllowance;
-    }
-
-
-    public void addFolders(Folder folder) {
-        if(!this.folders.contains(folder)) {
-            this.folders.add(folder);
-        }
     }
 
     public Collection<Folder> getFolders() {
         return db.getFolders(this);
     }
 
-
+    public boolean isAnonymousAllowance() {
+        return anonymousAllowance;
+    }
 
     public Collection<Thread> search(String searchWord) {
         return db.search(searchWord, this);

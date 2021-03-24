@@ -17,30 +17,23 @@ public abstract class Post {
         this.postedTime = LocalDateTime.now();
     }
 
-
     public User getAuthor() {
         return author;
-    }
-
-    public LocalDateTime getPostedTime() {
-        return postedTime;
-    }
-
-
-    public static void main(String[] args) {
-
     }
 
     public int getPostID() {
         return postID;
     }
 
-
     public String getContent() {
         return content;
     }
 
+    public LocalDateTime getPostedTime() {
+        return postedTime;
+    }
 
+    public static void main(String[] args) {
 
-
+    }
 }
