@@ -35,12 +35,12 @@ public class Course {
         return termYear;
     }
 
-    public boolean isAnonymousAllowance() {
-        return anonymousAllowance;
-    }
-
     public Collection<Folder> getFolders() {
         return db.getFolders(this);
+    }
+
+    public boolean isAnonymousAllowance() {
+        return anonymousAllowance;
     }
 
     public Collection<Thread> search(String searchWord) {
