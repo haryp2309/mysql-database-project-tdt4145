@@ -1,7 +1,5 @@
 package discussionForum;
 
-import static discussionForum.DatabaseController.db;
-
 public class Comment extends Post {
 
 

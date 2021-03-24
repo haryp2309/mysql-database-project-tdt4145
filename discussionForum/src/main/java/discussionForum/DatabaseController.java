@@ -2,7 +2,6 @@ package discussionForum;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public interface DatabaseController {
@@ -19,9 +18,9 @@ public interface DatabaseController {
 
     void postComment(String content, User author, LocalDateTime postedTime, DiscussionPost discussionPostID);
 
-    public Collection<Tag> getTags();
+    Collection<Tag> getTags();
 
-    public Collection<Tag> getTags(Thread thread);
+    Collection<Tag> getTags(Thread thread);
 
     void likePost(User user, Post post, LocalDateTime postedTime);
 
@@ -49,9 +48,9 @@ public interface DatabaseController {
     Collection<Map<String, String>> getStatistics(User user);
 
 
-    public Collection<Course> coursesToUser(User user);
+    Collection<Course> coursesToUser(User user);
 
-    public Collection<Folder> getFolders(Course course);
+    Collection<Folder> getFolders(Course course);
 
 
 

@@ -10,14 +10,12 @@ public class Folder {
 
     private int folderID;
     private String name;
-    private Collection<Folder> subfolders = new ArrayList<Folder>();
-    private Collection<Thread> threads = new ArrayList<Thread>();
+    private Collection<Folder> subfolders;
 
-    public Folder(int folderID, String name, Collection<Folder> subfolders, Collection<Thread> threads) {
+    public Folder(int folderID, String name, Collection<Folder> subfolders) {
         this.folderID = folderID;
         this.name = name;
         this.subfolders = subfolders;
-        this.threads = threads;
     }
 
     public int getFolderID() {
@@ -32,21 +30,10 @@ public class Folder {
         db.createFolder(name, subfolders, threads, course);
     }
 
-
-    public void setFolderID(int folderID) {
-        this.folderID = folderID;
-    }
-
     public String getName() {
         return name;
     }
 
-
-    public void addSubfolder(Folder subfolder) {
-        if (!this.subfolders.contains(subfolder)) {
-            this.subfolders.add(subfolder);
-        }
-    }
 
     public Collection<Folder> getSubfolders() {
         return subfolders;
