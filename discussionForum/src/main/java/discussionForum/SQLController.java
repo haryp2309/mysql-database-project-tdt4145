@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class SQLController extends MySQLConn implements DatabaseController {
@@ -29,41 +28,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public static final String TABLE_ROOTFOLDER = "RootFolder";
     public static final String TABLE_TAG = "Tag";
 
-    public static final String USER_ID = "UserID";
-    public static final String USER_FIRST_NAME = "FirstName";
-    public static final String USER_LAST_NAME = "LastName";
-    public static final String USER_EMAIL = "Email";
-    public static final String USER_PASSWORD = "Password";
-
-    public static final String COURSE_ID = "CourseID";
-    public static final String COURSE_NAME = "Name";
-    public static final String COURSE_TERMYEAR = "TermYear";
-    public static final String COURSE_TERM = "Term";
-    public static final String COURSE_ANOALLOWANCE = "AnonymousAllowance";
-
-    public static final String POST_ID = "PostID";
-    public static final String POST_CONTENT = "Content";
-    public static final String POST_AUTHOR_ID = "AuthorID";
-    public static final String POST_POSTED_TIME = "PostedTime";
-    public static final String POST_TYPE = "PostType";
-    public static final String POST_TYPES_THREAD = "Thread";
-    public static final String POST_THREAD_TITLE = "Title";
-    public static final String POST_THREAD_POST_ID = "PostID";
-    public static final String POST_THREAD_FOLDER_ID = "FolderID";
-    public static final String POST_DISCUSSION_POST_ID = "PostID";
-    public static final String POST_DISCUSSION_THREAD_ID = "ThreadID";
-    public static final String POST_COMMENT_POST_ID = "PostID";
-    public static final String POST_COMMENT_DISCUSSION_ID = "DiscussionID";
-
-    public static final String TAG_TAG_ID = "TagName";
-
-    public static final String VIEWED_TIME = "ViewedTime";
-    public static final String LIKED_TIME = "LikedTime";
-    public static final String VIEWEDBY_USERID = "UserID";
-
-    public static final String FOLDER_ID = "FolderID";
-    public static final String FOLDER_NAME = "Name";
-    public static final String FOLDER_TYPE = "FolderType";
 
     public SQLController() {
         this.connect();
@@ -125,10 +89,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
     @Override
     public User createUser(String firstName, String lastName, String email, String password) {
         HashMap<String, String> values = new HashMap<>();
-        values.put(USER_FIRST_NAME, firstName);
-        values.put(USER_LAST_NAME, lastName);
-        values.put(USER_EMAIL, email);
-        values.put(USER_PASSWORD, password);
+        values.put("FirstName", firstName);
+        values.put("LastName", lastName);
+        values.put("Email", email);
+        values.put("Password", password);
         int id = Integer.parseInt(Objects.requireNonNull(this.insert(values, TABLE_USER)));
         return new User(id, firstName, lastName, email);
     }
@@ -216,9 +180,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query1 += " RIGHT OUTER JOIN ";
         query1 += TABLE_USER;
         query1 += " ON ";
-        query1 += TABLE_USER + "." + USER_ID;
+        query1 += TABLE_USER + "." + "UserID";
         query1 += " = ";
-        query1 += TABLE_POST + "." + POST_AUTHOR_ID;
+        query1 += TABLE_POST + "." + "AuthorID";
         query1 += " NATURAL JOIN ";
         query1 += TABLE_USERINCOURSE;
         query1 += " WHERE (FolderID IN (";
@@ -226,7 +190,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query1 += ") OR FolderID IS Null) AND CourseID = ";
         query1 += course.getCourseID();
         query1 += " GROUP BY ";
-        query1 += USER_ID;
+        query1 += "UserID";
         query1 += " ) AS PostedUser";
 
         String query2 = "(SELECT ";
@@ -238,9 +202,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query2 += " RIGHT OUTER JOIN ";
         query2 += TABLE_USER;
         query2 += " ON ";
-        query2 += TABLE_USER + "." + USER_ID;
+        query2 += TABLE_USER + "." + "UserID";
         query2 += " = ";
-        query2 += TABLE_VIEWEDBY + "." + USER_ID;
+        query2 += TABLE_VIEWEDBY + "." + "UserID";
         query2 += " INNER JOIN ";
         query2 += TABLE_USERINCOURSE;
         query2 += " ON ";
@@ -253,7 +217,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query2 += ") OR FolderID IS Null) AND CourseID = ";
         query2 += course.getCourseID();
         query2 += " GROUP BY ";
-        query2 += USER_ID;
+        query2 += "UserID";
         query2 += " ) AS ViewedUser";
 
         String query = "SELECT ";
@@ -307,31 +271,18 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
 
     @Override
-    public boolean isEmailUsed(String email) {
-        Collection<Map<String, String>> result = select(null, TABLE_USER, "WHERE " + USER_EMAIL + " = \"" + email + "\"");
-        if (result.size() == 1) {
-            return true;
-        } else if (result.size() == 0) {
-            return false;
-        } else {
-            throw new IllegalStateException("Database is corrupted!!");
-        }
-    }
-
-
-    @Override
     public User signIn(String email, String password) {
-        Collection<Map<String, String>> result = select(null, TABLE_USER, "WHERE " + USER_EMAIL + " = \"" + email + "\" AND " + USER_PASSWORD + " = \"" + password + "\"");
+        Collection<Map<String, String>> result = select(null, TABLE_USER, "WHERE " + "Email" + " = \"" + email + "\" AND " + "Password" + " = \"" + password + "\"");
         if (result.size() > 1) {
             throw new IllegalStateException("Duplicate users in databse");
         } else if (result.size() < 1) {
             return null;
         } else {
             Map<String, String> userMap = result.iterator().next();
-            int id = Integer.parseInt(userMap.get(USER_ID));
-            String firstName = userMap.get(USER_FIRST_NAME);
-            String lastName = userMap.get(USER_LAST_NAME);
-            email = userMap.get(USER_EMAIL);
+            int id = Integer.parseInt(userMap.get("UserID"));
+            String firstName = userMap.get("FirstName");
+            String lastName = userMap.get("LastName");
+            email = userMap.get("Email");
             return new User(id, firstName, lastName, email);
         }
     }
@@ -340,7 +291,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public boolean isUserInstructor(User user, Course course){
         Collection<String> attributes = new ArrayList<>();
         attributes.add("IsInstructor");
-        Collection<Map<String, String>> result = select(attributes, TABLE_USERINCOURSE, "WHERE("+USER_ID+" = "+user.getUserID()+" AND "+COURSE_ID+" = "+course.getCourseID()+")");
+        Collection<Map<String, String>> result = select(attributes, TABLE_USERINCOURSE, "WHERE("+"UserID"+" = "+user.getUserID()+" AND "+ "CourseID" +" = "+course.getCourseID()+")");
         return result.stream()
                 .map(row -> Integer.parseInt(row.get("IsInstructor")) == 1)
                 .findFirst()
@@ -349,10 +300,10 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     private int post(String content, User author, LocalDateTime postedTime) {
         HashMap<String, String> values = new HashMap<>();
-        values.put(POST_CONTENT, content);
-        values.put(POST_AUTHOR_ID, Integer.toString(author.getUserID()));
-        values.put(POST_POSTED_TIME, localDateTimeConverter(postedTime));
-        values.put(POST_TYPE, POST_TYPES_THREAD);
+        values.put("Content", content);
+        values.put("AuthorID", Integer.toString(author.getUserID()));
+        values.put("PostedTime", localDateTimeConverter(postedTime));
+        values.put("PostType", "Thread");
         return Integer.parseInt(Objects.requireNonNull(this.insert(values, TABLE_POST)));
     }
 
@@ -360,9 +311,9 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public void postThread(String title, String content, User author, LocalDateTime postedTime, Folder folder, Collection<Tag> tags) {
         int postId = post(content, author, postedTime);
         HashMap<String, String> values = new HashMap<>();
-        values.put(POST_THREAD_POST_ID, Integer.toString(postId));
-        values.put(POST_THREAD_TITLE, title);
-        values.put(POST_THREAD_FOLDER_ID, Integer.toString(folder.getFolderID()));
+        values.put("PostID", Integer.toString(postId));
+        values.put("Title", title);
+        values.put("FolderID", Integer.toString(folder.getFolderID()));
         insert(values, TABLE_THREAD);
         tags.forEach(specifiedTag -> {
             tag(postId, specifiedTag);
@@ -374,8 +325,8 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public void postDiscussionPost(String content, User author, LocalDateTime postedTime, Thread thread) {
         int postId = post(content, author, postedTime);
         HashMap<String, String> values = new HashMap<>();
-        values.put(POST_DISCUSSION_POST_ID, Integer.toString(postId));
-        values.put(POST_DISCUSSION_THREAD_ID, Integer.toString(thread.getPostID()));
+        values.put("PostID", Integer.toString(postId));
+        values.put("ThreadID", Integer.toString(thread.getPostID()));
         insert(values, TABLE_DISCUSSION);
     }
 
@@ -383,15 +334,15 @@ public class SQLController extends MySQLConn implements DatabaseController {
     public void postComment(String content, User author, LocalDateTime postedTime, DiscussionPost discussionPost) {
         int postId = post(content, author, postedTime);
         HashMap<String, String> values = new HashMap<>();
-        values.put(POST_COMMENT_POST_ID, Integer.toString(postId));
-        values.put(POST_COMMENT_DISCUSSION_ID, Integer.toString(discussionPost.getPostID()));
+        values.put("PostID", Integer.toString(postId));
+        values.put("DiscussionID", Integer.toString(discussionPost.getPostID()));
         insert(values, TABLE_COMMENT);
     }
 
 
     private void tag(int threadId, Tag tag) {
         Map<String, String> values = new HashMap<>();
-        values.put(TAG_TAG_ID, tag.getValue());
+        values.put("TagName", tag.getValue());
         values.put("ThreadID", Integer.toString(threadId));
         insert(values, TABLE_TAG_ON_THREAD);
     }
@@ -412,7 +363,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 + TABLE_USER
                 + " ON UserID = AuthorID "
                 + " WHERE "
-                + FOLDER_ID
+                + "FolderID"
                 + " = "
                 + folder.getFolderID();
         Collection<Map<String, String>> result = select(attributes, TABLE_POST, additional);
@@ -465,7 +416,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     public Collection<Course> coursesToUser(User user) {
-        Collection<String> courseAttributes = new ArrayList<>(Arrays.asList(COURSE_ID, COURSE_NAME, COURSE_TERM, COURSE_TERMYEAR, COURSE_ANOALLOWANCE));
+        Collection<String> courseAttributes = new ArrayList<>(Arrays.asList("CourseID", "Name", "Term", "TermYear", "AnonymousAllowance"));
         Collection<Map<String, String>> courseRows = select(courseAttributes, TABLE_COURSE, "NATURAL JOIN userInCourse WHERE " + user.getUserID() + " = UserID");
         return courseRows
                 .stream()
@@ -474,34 +425,16 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     @Override
-    public void likePost(User user, Post post, LocalDateTime likedTime) {
-        HashMap<String, String> values = new HashMap<>();
-        values.put(USER_ID, Integer.toString(user.getUserID()));
-        values.put(POST_ID, Integer.toString(post.getPostID()));
-        values.put(LIKED_TIME, localDateTimeConverter(likedTime));
-        insert(values, TABLE_LIKEDBY);
-    }
-
-    @Override
     public void viewPost(User user, Post post, LocalDateTime viewedTimed) {
         String additional = "WHERE UserID="+user.getUserID()+" AND PostID="+post.getPostID();
         boolean alreadyExist = select(null, TABLE_VIEWEDBY,additional).size() > 0;
         if (!alreadyExist){
             Map<String, String> values = new HashMap<>();
-            values.put(USER_ID, Integer.toString(user.getUserID()));
-            values.put(POST_ID, Integer.toString(post.getPostID()));
-            values.put(VIEWED_TIME, localDateTimeConverter(viewedTimed));
+            values.put("UserID", Integer.toString(user.getUserID()));
+            values.put("PostID", Integer.toString(post.getPostID()));
+            values.put("ViewedTime", localDateTimeConverter(viewedTimed));
             insert(values, TABLE_VIEWEDBY);
         }
-    }
-
-    @Override
-    public void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
-        Map<String, String> rootFolders = new HashMap<>();
-        rootFolders.put(FOLDER_NAME, name);
-        rootFolders.put(FOLDER_TYPE, "Root");
-        rootFolders.put(COURSE_ID, Integer.toString(course.getCourseID()));
-        insert(rootFolders, TABLE_ROOTFOLDER);
     }
 
 

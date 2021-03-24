@@ -34,10 +34,6 @@ public class Folder {
         return subfolders;
     }
 
-    public static void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
-        db.createFolder(name, subfolders, threads, course);
-    }
-
     public void postThread(String title, String content, User author, Collection<Tag> tags) {
         db.postThread(title, content, author, LocalDateTime.now(), this, tags);
     }

@@ -12,11 +12,7 @@ public interface DatabaseController {
 
     User signIn(String email, String password);
 
-    boolean isEmailUsed(String email);
-
     Collection<Course> coursesToUser(User user);
-
-    void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course);
 
     Collection<Folder> getFolders(Course course);
 
@@ -30,8 +26,6 @@ public interface DatabaseController {
 
     Collection<Tag> getTags(Thread thread);
 
-    void likePost(User user, Post post, LocalDateTime postedTime);
-
     void viewPost(User user, Post post, LocalDateTime postedTimed);
 
     Collection<Thread> getThreads(Folder folder);
@@ -44,7 +38,7 @@ public interface DatabaseController {
 
     Collection<Map<String, String>> getStatistics(User user, Course course);
 
-    public boolean isUserInstructor(User user, Course course);
+    boolean isUserInstructor(User user, Course course);
 
 
 }
