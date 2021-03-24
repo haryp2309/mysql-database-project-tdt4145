@@ -26,17 +26,16 @@ public class Folder {
         return db.getThreads(this);
     }
 
-    public static void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
-        db.createFolder(name, subfolders, threads, course);
-    }
-
     public String getName() {
         return name;
     }
 
-
     public Collection<Folder> getSubfolders() {
         return subfolders;
+    }
+
+    public static void createFolder(String name, Collection<Folder> subfolders, Collection<Thread> threads, Course course) {
+        db.createFolder(name, subfolders, threads, course);
     }
 
     public void postThread(String title, String content, User author, Collection<Tag> tags) {
