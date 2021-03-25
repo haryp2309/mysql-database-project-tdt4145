@@ -70,29 +70,54 @@ public interface DatabaseController {
      * @return En "Collection" av alle disse tag-objektene som er definert i databasen
      */
 
-    Collection<Tag> getAllTags();
+    /**
+     * Henter ut alle tags som eksisterer (i databasen).
+     * @return en liste med alle Tag som eksisterer.
+     */
+     Collection<Tag> getAllTags();
 
+    /**
+     * Henter ut alle tags en Thread har.
+     * @param thread Threaden man ønsker å hente tags fra.
+     * @return en liste med alle Tag Thread-en har.
+     */
     Collection<Tag> getAllTags(Thread thread);
 
-    void viewPost(User user, Post post, LocalDateTime postedTimed);
+    /**
+     * Registrerer når en bruker har sett en post.
+     * @param user brukeren som ser posten.
+     * @param post posten som blir sett.
+     * @param viewedTime tidspunktet som brukeren så posten.
+     */
+    void viewPost(User user, Post post, LocalDateTime viewedTime);
 
+    /**
+     * Finner frem alle Threads som tilhører en bestemt Folder.
+     * @param folder Folder som man skal finne alle Threads til.
+     * @return en liste med alle Threads som tilhører Folder som ble tatt inn som parameter.
+     */
     Collection<Thread> getThreads(Folder folder);
 
+    /**
+     * Finner frem alle DiscussionPost som tilhører en bestemt Thread.
+     * @param thread Thread som man skal finne alle DiscussionPost til.
+     * @return en liste med alle DiscussionPost som tilhører Thread som ble tatt inn som parameter.
+     */
     Collection<DiscussionPost> getDiscussionPosts (Thread thread);
 
     /**
-     * Finner frem alle comments som tilhører en bestemt discussionPost
-     * @param discussionPost discussionPosten som man skal finne alle comments til
-     * @return en liste med alle comments som tilhører discussionPost som ble tatt inn som parameter.
+     * Finner frem alle Comments som tilhører en bestemt DiscussionPost.
+     * @param discussionPost DiscussionPosten som man skal finne alle comments til.
+     * @return en liste med alle Comments som tilhører DiscussionPost som ble tatt inn som parameter.
      */
     Collection<Comment> getComments (DiscussionPost discussionPost);
 
     /**
-     * Søker etter et søkeord blant tråder (Thread-objekter) i et bestemt kurs, i databasen.
-     * Søker i både tittelen (Title) og selve teksten til tråden (Content)
-     * @param searchWord søkeordet
-     * @param course kurset
-     * @return en liste med tråder som inneholder søkeordet
+     * Søker etter et søkeord blant Threads i et bestemt Course, i databasen.
+     * Søker i både Title og selve teksten til tråden (Content).
+     * @param searchWord søkeordet.
+     * @param course kurset man ønsker å søke i.
+     * @return en liste med tråder som inneholder søkeordet.
      */
     Collection<Thread> search(String searchWord, Course course);
 
@@ -100,16 +125,16 @@ public interface DatabaseController {
      * Henter ut statistikk om alle brukere.
      * Statistikken består av antall poster en bruker har lagt ut,
      * og antall poster en bruker har sett.
-     * @param course kurset man ønsker statistikk om
-     * @return en collection med rader som inneholder statistikk om hver person
+     * @param course kurset man ønsker statistikk om.
+     * @return en collection med rader som inneholder statistikk om hver person.
      */
     Collection<Map<String, String>> getStatistics(Course course);
 
     /**
-     * 
-     * @param user
-     * @param course
-     * @return
+     * Sjekker om en bruker er instruktør eller student. Brukes for å gi riktig rettigheter.
+     * @param user brukeren man skal sjekke.
+     * @param course kurset men sjekker rollen i.
+     * @return True hvis brukeren er instruktør i kurset, False hvis ikke.
      */
     boolean isUserInstructor(User user, Course course);
 
