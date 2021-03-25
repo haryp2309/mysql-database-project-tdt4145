@@ -258,10 +258,13 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public Collection<Map<String, String>> getStatistics(User user, Course course) {
+        // Lager en streng med alle mapper og undermapper i et kurs formatert
+        // som "id1, id2, id3..."
         String seperatedFolderIDs = getFolderIdsInCourse(course).stream()
                 .reduce((id1, id2) -> id1+", "+id2)
                 .orElse(null);
 
+        // Lager nesta spørring 1
         String query1 = "(SELECT ";
         query1 += "UserID, Email, COUNT(PostedTime) AS NoOfPostCreated";
         query1 += " FROM ";
@@ -284,6 +287,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query1 += "UserID";
         query1 += " ) AS PostedUser";
 
+        // Lager nesta spørring 2
         String query2 = "(SELECT ";
         query2 += TABLE_USER+".UserID, COUNT(ViewedTime) AS NoOfPostViewed";
         query2 += " FROM ";
@@ -311,6 +315,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query2 += "UserID";
         query2 += " ) AS ViewedUser";
 
+        // Lager selve spørringen
         String query = "SELECT ";
         query += "Email, NoOfPostCreated, NoOfPostViewed";
         query += " FROM ";
@@ -321,22 +326,22 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query += "PostedUser.UserID = ViewedUser.UserID ";
         query += "ORDER BY NoOfPostViewed DESC";
 
-
-        Collection<String> attributes = new ArrayList(Arrays.asList("Email", "NoOfPostCreated", "NoOfPostViewed"));
+        Collection<String> attributes = new ArrayList<>(Arrays.asList("Email", "NoOfPostCreated", "NoOfPostViewed"));
 
         return customSelect(query, attributes);
-
-
     }
 
     @Override
     public User signIn(String email, String password) {
         Collection<Map<String, String>> result = select(null, TABLE_USER, "WHERE " + "Email" + " = \"" + email + "\" AND " + "Password" + " = \"" + password + "\"");
         if (result.size() > 1) {
+            // Skal aldri skje...
             throw new IllegalStateException("Duplicate users in databse");
         } else if (result.size() < 1) {
+            // Feil brukernavn/passord
             return null;
         } else {
+            // Riktig innlogginsinfo
             Map<String, String> userMap = result.iterator().next();
             int id = Integer.parseInt(userMap.get("UserID"));
             String firstName = userMap.get("FirstName");
@@ -391,7 +396,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public Collection<Thread> getThreads(Folder folder) {
-
         Collection<String> attributes = new ArrayList<>();
         attributes.add("PostID");
         attributes.add("Title");
@@ -409,17 +413,22 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 + "FolderID"
                 + " = "
                 + folder.getFolderID();
+
         Collection<Map<String, String>> result = select(attributes, TABLE_POST, additional);
         return result.stream().map(row -> {
-            int postId = Integer.parseInt(row.get("PostID"));
-            String title = row.get("Title");
-            String content = row.get("Content");
+            // Gjør hver rad om til Java-objekter
 
+            // Her opprettes selve forfatteren
             int userId = Integer.parseInt(row.get("UserID"));
             String firstName = row.get("FirstName");
             String lastName = row.get("LastName");
             String email = row.get("Email");
             User author = new User(userId, firstName, lastName, email);
+
+            // Her opprettes selve posten
+            int postId = Integer.parseInt(row.get("PostID"));
+            String title = row.get("Title");
+            String content = row.get("Content");
             return new Thread(postId, title, content, author);
         }).collect(Collectors.toList());
 
@@ -433,6 +442,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("AuthorID");
         attributes.add("FirstName");
         attributes.add("LastName");
+
         String additional = "NATURAL JOIN ";
         additional += TABLE_COMMENT;
         additional += " INNER JOIN ";
@@ -440,15 +450,20 @@ public class SQLController extends MySQLConn implements DatabaseController {
         additional += " ON AuthorID = UserID WHERE DiscussionID = \"";
         additional += discussionPost.getPostID();
         additional += "\"";
+
         Collection<Map<String, String>> result = select(attributes, TABLE_POST, additional);
         return result.stream().map(row -> {
-            int postId = Integer.parseInt(row.get("PostID"));
+            // Gjør radene om til Java-objekter
+
+            // Oppretter forfatteren
             User author = new User(
                     Integer.parseInt(row.get("AuthorID")),
                     row.get("FirstName"),
                     row.get("LastName"),
                     null
             );
+            // Oppretter kommentaren
+            int postId = Integer.parseInt(row.get("PostID"));
             String content = row.get("Content");
             return new Comment(postId, content, author);
 
@@ -503,6 +518,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("AuthorID");
         attributes.add("FirstName");
         attributes.add("LastName");
+
         String additional = "NATURAL JOIN ";
         additional += TABLE_DISCUSSION;
         additional += " INNER JOIN ";
@@ -512,14 +528,19 @@ public class SQLController extends MySQLConn implements DatabaseController {
         additional += "\"";
         return select(attributes, TABLE_POST,additional).stream()
                 .map(row -> {
-                    int postID = Integer.parseInt(row.get("PostID"));
-                    String content = row.get("Content");
+                    // Gjør rader om til Java-objekter
+
+                    // Oppretter forfatter
                     User author = new User(
                             Integer.parseInt(row.get("AuthorID")),
                             row.get("FirstName"),
                             row.get("LastName"),
                             null
                     );
+
+                    // Oppretter posten
+                    int postID = Integer.parseInt(row.get("PostID"));
+                    String content = row.get("Content");
                     return new DiscussionPost(postID, content, author, null);
                 })
                 .collect(Collectors.toList());
