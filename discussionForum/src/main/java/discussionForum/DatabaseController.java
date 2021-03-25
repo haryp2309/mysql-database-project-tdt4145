@@ -30,6 +30,11 @@ public interface DatabaseController {
 
     Collection<DiscussionPost> getDiscussionPosts (Thread thread);
 
+    /**
+     * Finner frem alle comments som tilhører en bestemt discussionPost
+     * @param discussionPost discussionPosten som man skal finne alle comments til
+     * @return en liste med alle comments som tilhører discussionPost som ble tatt inn som parameter.
+     */
     Collection<Comment> getComments (DiscussionPost discussionPost);
 
     /**
@@ -42,15 +47,21 @@ public interface DatabaseController {
     Collection<Thread> search(String searchWord, Course course);
 
     /**
-     * Finner frem statistikk om alle brukere.
-     * Statistikken består av tall på antall poster en bruker har lagt ut,
-     * og tall på antall poster en bruker har sett.
-     * @param user
-     * @param course
-     * @return en collection med rader som inneholder info om hver person
+     * Henter ut statistikk om alle brukere.
+     * Statistikken består av antall poster en bruker har lagt ut,
+     * og antall poster en bruker har sett.
+     * @param user brukeren som er logget inn
+     * @param course kurset man ønsker statistikk om
+     * @return en collection med rader som inneholder statistikk om hver person
      */
     Collection<Map<String, String>> getStatistics(User user, Course course);
 
+    /**
+     * 
+     * @param user
+     * @param course
+     * @return
+     */
     boolean isUserInstructor(User user, Course course);
 
 }
