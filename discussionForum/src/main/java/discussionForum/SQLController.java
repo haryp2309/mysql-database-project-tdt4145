@@ -33,6 +33,14 @@ public class SQLController extends MySQLConn implements DatabaseController {
         this.connect();
     }
 
+    /**
+     * Definerer en SELECT-spørring og sender spørringen til databasen.
+     * @param attributes hvilke attributter som skal hentes tilbake
+     * @param table hvilken tabell spørringen skal rettes mot
+     * @param additionalSQLStatements ekstra statements som skal komme på
+     *                                slutten av spørringen
+     * @return en collection med rader, hvor hver rad er representert med en map.
+     */
     private Collection<Map<String, String>> select(Collection<String> attributes, String table, String additionalSQLStatements) {
         if (attributes == null) {
             attributes = new ArrayList<>();
@@ -50,6 +58,12 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     }
 
+    /**
+     * Sender en INSERT-setning til databasen.
+     * @param values raden sine verdier representert som en Map
+     * @param table tabellen raden skal puttes inn i
+     * @return eventuelt generert PK
+     */
     private String insert(Map<String, String> values, String table) {
         if (values.isEmpty()) throw new IllegalArgumentException("Attributes can't be empty");
         String columns = values.keySet().stream()
@@ -84,6 +98,12 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return null;
     }
 
+    /**
+     * Går rekursivt inn i hver undermappe i et kurs og henter
+     * absolutt alle ID-er for alle mappene i kurset.
+     * @param course hvilket kurs den skal lete i
+     * @return en liste med ID-er.
+     */
     private Collection<String> getFolderIdsInCourse(Course course) {
         Collection<Folder> folders = getFolders(course);
         Collection<String> folderIds = new ArrayList<>();
@@ -97,6 +117,11 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return folderIds;
     }
 
+    /**
+     * Tagger en post med en gitt tag.
+     * @param threadId ID-en til thread-en den skal tagge
+     * @param tag hvilken tag den skal bruke
+     */
     private void tag(int threadId, Tag tag) {
         Map<String, String> values = new HashMap<>();
         values.put("TagName", tag.getValue());
@@ -104,10 +129,20 @@ public class SQLController extends MySQLConn implements DatabaseController {
         insert(values, TABLE_TAG_ON_THREAD);
     }
 
+    /**
+     * Konverterer LocalDateTime til en string databasen aksepterer
+     * @param localDateTime tiden den skal konvertere
+     * @return selve strengen databasen aksepterer
+     */
     private String localDateTimeConverter(LocalDateTime localDateTime) {
         return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
+    /**
+     * Henter undermappa til en Folder.
+     * @param parentID ParentFolder-ens ID
+     * @return en liste med undermapper
+     */
     private Collection<Folder> getSubFolders(int parentID) {
         Collection<String> attributes = new ArrayList<>();
         attributes.add("FolderID");
@@ -120,6 +155,59 @@ public class SQLController extends MySQLConn implements DatabaseController {
                     return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders);
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Kjører en selvskreven SELECT-spørring.
+     * @param query selve spørringen
+     * @param attributes attributtene den skal hente ut
+     * @return en collection med rader hvor rader er representert som en map
+     */
+    private Collection<Map<String, String>> customSelect(String query, Collection<String> attributes) {
+        System.out.println(query);
+        Collection<Map<String, String>> result = new ArrayList<>();
+        try {
+            Statement stmt = this.conn.createStatement();
+            ResultSet rset = stmt.executeQuery(query);
+
+            while (rset.next()) {
+                if (attributes.isEmpty()) {
+                    int length = rset.getMetaData().getColumnCount();
+                    for (int i = 1; i <= length; i++) {
+                        attributes.add(rset.getMetaData().getColumnName(i));
+                    }
+                }
+                Map<String, String> map = new HashMap<>();
+                attributes.forEach(attribute -> {
+                    try {
+                        String cell = rset.getString(attribute);
+                        map.put(attribute, cell);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                });
+                result.add(map);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Poster en post til databasen.
+     * @param content innholdet i posten
+     * @param author forfatteren av posten
+     * @param postedTime når posten ble postet
+     * @return id-en til posten som ble opprettet
+     */
+    private int post(String content, User author, LocalDateTime postedTime) {
+        HashMap<String, String> values = new HashMap<>();
+        values.put("Content", content);
+        values.put("AuthorID", Integer.toString(author.getUserID()));
+        values.put("PostedTime", localDateTimeConverter(postedTime));
+        values.put("PostType", "Thread");
+        return Integer.parseInt(Objects.requireNonNull(this.insert(values, TABLE_POST)));
     }
 
     @Override
@@ -170,10 +258,13 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public Collection<Map<String, String>> getStatistics(User user, Course course) {
+        // Lager en streng med alle mapper og undermapper i et kurs formatert
+        // som "id1, id2, id3..."
         String seperatedFolderIDs = getFolderIdsInCourse(course).stream()
                 .reduce((id1, id2) -> id1+", "+id2)
                 .orElse(null);
 
+        // Lager nesta spørring 1
         String query1 = "(SELECT ";
         query1 += "UserID, Email, COUNT(PostedTime) AS NoOfPostCreated";
         query1 += " FROM ";
@@ -196,6 +287,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query1 += "UserID";
         query1 += " ) AS PostedUser";
 
+        // Lager nesta spørring 2
         String query2 = "(SELECT ";
         query2 += TABLE_USER+".UserID, COUNT(ViewedTime) AS NoOfPostViewed";
         query2 += " FROM ";
@@ -223,6 +315,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query2 += "UserID";
         query2 += " ) AS ViewedUser";
 
+        // Lager selve spørringen
         String query = "SELECT ";
         query += "Email, NoOfPostCreated, NoOfPostViewed";
         query += " FROM ";
@@ -233,53 +326,22 @@ public class SQLController extends MySQLConn implements DatabaseController {
         query += "PostedUser.UserID = ViewedUser.UserID ";
         query += "ORDER BY NoOfPostViewed DESC";
 
-
-        Collection<String> attributes = new ArrayList(Arrays.asList("Email", "NoOfPostCreated", "NoOfPostViewed"));
+        Collection<String> attributes = new ArrayList<>(Arrays.asList("Email", "NoOfPostCreated", "NoOfPostViewed"));
 
         return customSelect(query, attributes);
-
-
-    }
-
-    private Collection<Map<String, String>> customSelect(String query, Collection<String> attributes) {
-        System.out.println(query);
-        Collection<Map<String, String>> result = new ArrayList<>();
-        try {
-            Statement stmt = this.conn.createStatement();
-            ResultSet rset = stmt.executeQuery(query);
-
-            while (rset.next()) {
-                if (attributes.isEmpty()) {
-                    int length = rset.getMetaData().getColumnCount();
-                    for (int i = 1; i <= length; i++) {
-                        attributes.add(rset.getMetaData().getColumnName(i));
-                    }
-                }
-                Map<String, String> map = new HashMap<>();
-                attributes.forEach(attribute -> {
-                    try {
-                        String cell = rset.getString(attribute);
-                        map.put(attribute, cell);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                });
-                result.add(map);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return result;
     }
 
     @Override
     public User signIn(String email, String password) {
         Collection<Map<String, String>> result = select(null, TABLE_USER, "WHERE " + "Email" + " = \"" + email + "\" AND " + "Password" + " = \"" + password + "\"");
         if (result.size() > 1) {
+            // Skal aldri skje...
             throw new IllegalStateException("Duplicate users in databse");
         } else if (result.size() < 1) {
+            // Feil brukernavn/passord
             return null;
         } else {
+            // Riktig innlogginsinfo
             Map<String, String> userMap = result.iterator().next();
             int id = Integer.parseInt(userMap.get("UserID"));
             String firstName = userMap.get("FirstName");
@@ -298,15 +360,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 .map(row -> Integer.parseInt(row.get("IsInstructor")) == 1)
                 .findFirst()
                 .orElse(false);
-    }
-
-    private int post(String content, User author, LocalDateTime postedTime) {
-        HashMap<String, String> values = new HashMap<>();
-        values.put("Content", content);
-        values.put("AuthorID", Integer.toString(author.getUserID()));
-        values.put("PostedTime", localDateTimeConverter(postedTime));
-        values.put("PostType", "Thread");
-        return Integer.parseInt(Objects.requireNonNull(this.insert(values, TABLE_POST)));
     }
 
     @Override
@@ -343,7 +396,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
 
     @Override
     public Collection<Thread> getThreads(Folder folder) {
-
         Collection<String> attributes = new ArrayList<>();
         attributes.add("PostID");
         attributes.add("Title");
@@ -361,22 +413,28 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 + "FolderID"
                 + " = "
                 + folder.getFolderID();
+
         Collection<Map<String, String>> result = select(attributes, TABLE_POST, additional);
         return result.stream().map(row -> {
-            int postId = Integer.parseInt(row.get("PostID"));
-            String title = row.get("Title");
-            String content = row.get("Content");
+            // Gjør hver rad om til Java-objekter
 
+            // Her opprettes selve forfatteren
             int userId = Integer.parseInt(row.get("UserID"));
             String firstName = row.get("FirstName");
             String lastName = row.get("LastName");
             String email = row.get("Email");
             User author = new User(userId, firstName, lastName, email);
+
+            // Her opprettes selve posten
+            int postId = Integer.parseInt(row.get("PostID"));
+            String title = row.get("Title");
+            String content = row.get("Content");
             return new Thread(postId, title, content, author);
         }).collect(Collectors.toList());
 
     }
 
+    @Override
     public Collection<Comment> getComments(DiscussionPost discussionPost){
         Collection<String> attributes = new ArrayList<>();
         attributes.add("PostID");
@@ -384,6 +442,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("AuthorID");
         attributes.add("FirstName");
         attributes.add("LastName");
+
         String additional = "NATURAL JOIN ";
         additional += TABLE_COMMENT;
         additional += " INNER JOIN ";
@@ -391,22 +450,27 @@ public class SQLController extends MySQLConn implements DatabaseController {
         additional += " ON AuthorID = UserID WHERE DiscussionID = \"";
         additional += discussionPost.getPostID();
         additional += "\"";
+
         Collection<Map<String, String>> result = select(attributes, TABLE_POST, additional);
         return result.stream().map(row -> {
-            int postId = Integer.parseInt(row.get("PostID"));
+            // Gjør radene om til Java-objekter
+
+            // Oppretter forfatteren
             User author = new User(
                     Integer.parseInt(row.get("AuthorID")),
                     row.get("FirstName"),
                     row.get("LastName"),
                     null
             );
+            // Oppretter kommentaren
+            int postId = Integer.parseInt(row.get("PostID"));
             String content = row.get("Content");
             return new Comment(postId, content, author);
 
         }).collect(Collectors.toList());
     }
 
-
+    @Override
     public Collection<Course> coursesToUser(User user) {
         Collection<String> courseAttributes = new ArrayList<>(Arrays.asList("CourseID", "Name", "Term", "TermYear", "AnonymousAllowance"));
         Collection<Map<String, String>> courseRows = select(courseAttributes, TABLE_COURSE, "NATURAL JOIN userInCourse WHERE " + user.getUserID() + " = UserID");
@@ -429,7 +493,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }
     }
 
-
+    @Override
     public Collection<Folder> getFolders(Course course) {
         Collection<String> attributes = new ArrayList<>();
         attributes.add("FolderID");
@@ -454,6 +518,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         attributes.add("AuthorID");
         attributes.add("FirstName");
         attributes.add("LastName");
+
         String additional = "NATURAL JOIN ";
         additional += TABLE_DISCUSSION;
         additional += " INNER JOIN ";
@@ -463,19 +528,25 @@ public class SQLController extends MySQLConn implements DatabaseController {
         additional += "\"";
         return select(attributes, TABLE_POST,additional).stream()
                 .map(row -> {
-                    int postID = Integer.parseInt(row.get("PostID"));
-                    String content = row.get("Content");
+                    // Gjør rader om til Java-objekter
+
+                    // Oppretter forfatter
                     User author = new User(
                             Integer.parseInt(row.get("AuthorID")),
                             row.get("FirstName"),
                             row.get("LastName"),
                             null
                     );
+
+                    // Oppretter posten
+                    int postID = Integer.parseInt(row.get("PostID"));
+                    String content = row.get("Content");
                     return new DiscussionPost(postID, content, author, null);
                 })
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Collection<Tag> getAllTags() {
         Collection<String> attributes = new ArrayList<>();
         attributes.add("TagName");
@@ -484,6 +555,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Collection<Tag> getAllTags(Thread thread) {
         Collection<String> attributes = new ArrayList<>();
         attributes.add("TagName");
