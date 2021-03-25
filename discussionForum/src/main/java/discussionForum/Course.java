@@ -49,8 +49,8 @@ public class Course {
         return db.search(searchWord, this);
     }
 
-    public Collection<Map<String, String>> getStatistics(User user) {
-        return db.getStatistics(user, this);
+    public Collection<Map<String, String>> getStatistics() {
+        return db.getStatistics(this);
     }
 
     @Override

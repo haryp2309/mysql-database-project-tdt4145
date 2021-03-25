@@ -50,11 +50,10 @@ public interface DatabaseController {
      * Henter ut statistikk om alle brukere.
      * Statistikken består av antall poster en bruker har lagt ut,
      * og antall poster en bruker har sett.
-     * @param user brukeren som er logget inn
      * @param course kurset man ønsker statistikk om
      * @return en collection med rader som inneholder statistikk om hver person
      */
-    Collection<Map<String, String>> getStatistics(User user, Course course);
+    Collection<Map<String, String>> getStatistics(Course course);
 
     /**
      * 

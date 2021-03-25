@@ -257,7 +257,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
     }
 
     @Override
-    public Collection<Map<String, String>> getStatistics(User user, Course course) {
+    public Collection<Map<String, String>> getStatistics(Course course) {
         // Lager en streng med alle mapper og undermapper i et kurs formatert
         // som "id1, id2, id3..."
         String seperatedFolderIDs = getFolderIdsInCourse(course).stream()

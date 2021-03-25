@@ -28,7 +28,7 @@ public class StatisticsController extends AbstractController{
             switchScene(AvailableSceneName.COURSE_HOME);
         });
         User currentUser = getForum().getCurrentUser();
-        Collection<Map<String, String>> stats = getForum().getCurrentCourse().getStatistics(currentUser);
+        Collection<Map<String, String>> stats = getForum().getCurrentCourse().getStatistics();
 
         Collection<String> newStats = stats.stream().map(row -> {
             String email = row.get("Email");
