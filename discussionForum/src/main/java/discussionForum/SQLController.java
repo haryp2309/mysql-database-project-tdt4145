@@ -97,9 +97,31 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return folderIds;
     }
 
-    //search søker etter et søkeord blant tråder (Thread-objekter) i et bestemt kurs, i databasen.
-    //Metoden søker etter ordet i både tittelen (Title) og selve teksten til tråden (Content)
-    //Metoden returnerer en liste med tråder som inneholder søkeordet.
+    private void tag(int threadId, Tag tag) {
+        Map<String, String> values = new HashMap<>();
+        values.put("TagName", tag.getValue());
+        values.put("ThreadID", Integer.toString(threadId));
+        insert(values, TABLE_TAG_ON_THREAD);
+    }
+
+    private String localDateTimeConverter(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    private Collection<Folder> getSubFolders(int parentID) {
+        Collection<String> attributes = new ArrayList<>();
+        attributes.add("FolderID");
+        attributes.add("Title");
+        String additional = "NATURAL JOIN " + TABLE_SUB_FOLDER + " WHERE ParentFolderID = \"" + parentID + "\"";
+        Collection<Map<String, String>> result = select(attributes, TABLE_FOLDER, additional);
+        return result.stream()
+                .map(row -> {
+                    Collection<Folder> subFolders = getSubFolders(Integer.parseInt(row.get("FolderID")));
+                    return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders);
+                })
+                .collect(Collectors.toList());
+    }
+
     @Override
     public Collection<Thread> search(String searchWord, Course course) {
         Collection<String> attributes = new ArrayList<>();
@@ -146,12 +168,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }).collect(Collectors.toList());
     }
 
-    //Metoden getStatistics finner frem statistikk om alle brukere.
-    //Statistikken består av tall på antall poster en bruker har lagt ut,
-    //og tall på antall poster en bruker har sett.
-    //
-    //HVA RETURNERER METODEN HJELP
-    //
     @Override
     public Collection<Map<String, String>> getStatistics(User user, Course course) {
         String seperatedFolderIDs = getFolderIdsInCourse(course).stream()
@@ -256,7 +272,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
         return result;
     }
 
-
     @Override
     public User signIn(String email, String password) {
         Collection<Map<String, String>> result = select(null, TABLE_USER, "WHERE " + "Email" + " = \"" + email + "\" AND " + "Password" + " = \"" + password + "\"");
@@ -326,14 +341,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
         insert(values, TABLE_COMMENT);
     }
 
-
-    private void tag(int threadId, Tag tag) {
-        Map<String, String> values = new HashMap<>();
-        values.put("TagName", tag.getValue());
-        values.put("ThreadID", Integer.toString(threadId));
-        insert(values, TABLE_TAG_ON_THREAD);
-    }
-
+    @Override
     public Collection<Thread> getThreads(Folder folder) {
 
         Collection<String> attributes = new ArrayList<>();
@@ -398,9 +406,6 @@ public class SQLController extends MySQLConn implements DatabaseController {
         }).collect(Collectors.toList());
     }
 
-    private String localDateTimeConverter(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
-    }
 
     public Collection<Course> coursesToUser(User user) {
         Collection<String> courseAttributes = new ArrayList<>(Arrays.asList("CourseID", "Name", "Term", "TermYear", "AnonymousAllowance"));
@@ -471,7 +476,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 .collect(Collectors.toList());
     }
 
-    public Collection<Tag> getTags() {
+    public Collection<Tag> getAllTags() {
         Collection<String> attributes = new ArrayList<>();
         attributes.add("TagName");
         return select(attributes, TABLE_TAG, "").stream()
@@ -479,7 +484,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 .collect(Collectors.toList());
     }
 
-    public Collection<Tag> getTags(Thread thread) {
+    public Collection<Tag> getAllTags(Thread thread) {
         Collection<String> attributes = new ArrayList<>();
         attributes.add("TagName");
         String additional = "WHERE ThreadID = "+thread.getPostID();
@@ -488,19 +493,7 @@ public class SQLController extends MySQLConn implements DatabaseController {
                 .collect(Collectors.toList());
     }
 
-    private Collection<Folder> getSubFolders(int parentID) {
-        Collection<String> attributes = new ArrayList<>();
-        attributes.add("FolderID");
-        attributes.add("Title");
-        String additional = "NATURAL JOIN " + TABLE_SUB_FOLDER + " WHERE ParentFolderID = \"" + parentID + "\"";
-        Collection<Map<String, String>> result = select(attributes, TABLE_FOLDER, additional);
-        return result.stream()
-                .map(row -> {
-                    Collection<Folder> subFolders = getSubFolders(Integer.parseInt(row.get("FolderID")));
-                    return new Folder(Integer.parseInt(row.get("FolderID")), row.get("Title"), subFolders);
-                })
-                .collect(Collectors.toList());
-    }
+
 }
 
 

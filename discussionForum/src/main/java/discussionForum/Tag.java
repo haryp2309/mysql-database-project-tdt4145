@@ -22,6 +22,6 @@ public class Tag {
     }
 
     public static Collection<Tag> getAllTags() {
-        return db.getTags();
+        return db.getAllTags();
     }
 }

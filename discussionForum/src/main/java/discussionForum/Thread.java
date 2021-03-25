@@ -3,7 +3,6 @@ package discussionForum;
 import static discussionForum.DatabaseController.db;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class Thread extends Post {
@@ -28,7 +27,7 @@ public class Thread extends Post {
     }
 
     public Collection<Tag> getTags() {
-        return db.getTags(this);
+        return db.getAllTags(this);
     }
 
     @Override
