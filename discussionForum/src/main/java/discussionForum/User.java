@@ -19,8 +19,6 @@ public class User {
         this.email = email;
     }
 
-
-
     public static User signIn(String Email, String Password) {
         User user = db.signIn(Email, Password);
         if (user != null) {
