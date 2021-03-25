@@ -50,7 +50,7 @@ public interface DatabaseController {
      * @param content Innholdet i DiscussionPost
      * @param author Brukeren som opprettet DiscussionPost.
      * @param postedTime Tidspunktet DiscussionPost ble opprettet
-     * @param thread Tilhørende Thread
+     * @param thread Thread-en discussionPost tilhører
      */
     void postDiscussionPost(String content, User author, LocalDateTime postedTime, Thread thread);
 
@@ -60,7 +60,7 @@ public interface DatabaseController {
      * @param content Innholdet i Comment
      * @param author Brukeren som opprettet Comment
      * @param postedTime Tidspunktet Comment ble opprettet.
-     * @param discussionPost Tilhørende DiscussionPost
+     * @param discussionPost DiscussionPost-en comment tilhører
      */
 
     void postComment(String content, User author, LocalDateTime postedTime, DiscussionPost discussionPost);
